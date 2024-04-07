@@ -23,8 +23,8 @@ const port = process.env.PORT || 3000;
  *
  * @return {Response} Sends a text response confirming the successful GET request.
  */
-app.get(`${baseUrlPath}/test`, (req, res) => {
-	res.status(200).send("GET request to the test endpoint");
+app.get(`${baseUrlPath}/zapier`, (req, res) => {
+	res.status(200).send("GET request to the zapier endpoint");
 });
 
 /**
@@ -35,7 +35,7 @@ app.get(`${baseUrlPath}/test`, (req, res) => {
  * @param {Object} req.body - The JSON payload of the request, expected to contain "bookingId".
  * @return {Response} Indicates whether the corresponding file was created or updated.
  */
-app.post(`${baseUrlPath}/test`, (req, res) => {
+app.post(`${baseUrlPath}/zapier`, (req, res) => {
 	const bookingId = req.body.bookingId; // Extracts the booking ID from the request body
 
 	// Checks for the presence of the bookingId in the request
