@@ -184,21 +184,7 @@ composer.phar
 /.htaccess
 
 # custom ignores
-/wp/wp-admin
-/wp/wp-includes
-
-/wp/wp-**.php
-
-# wp content files
-/wp/wp-content/*
-
-# wordpress plugins
-!/wp/wp-content/plugins
-
-# wordpress themes
-!/wp/wp-content/themes
-/wp/wp-content/themes/twenty*
-
+/wp
 
 *.code-workspace
 guiando.code-workspace
