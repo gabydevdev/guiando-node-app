@@ -6,6 +6,7 @@
     ],
     "settings": {
         "wordpressThemeJsonCssAutosuggest.themeJsonPath": "/e:/laragon/www/guiando/wp-content/themes/twentytwentythree/theme.json",
-        "explorer.excludeGitIgnore": true
+        "explorer.excludeGitIgnore": true,
+        "search.useIgnoreFiles": false
     }
 }
