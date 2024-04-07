@@ -1,0 +1,30 @@
+{
+  "bookingId": "41486561",
+  "confirmationCode": "VIA-41486561",
+  "creationDate": "2024-04-06T21:28:16Z",
+  "customer": {
+    "email": "MSG-7ac316d6-2545-43db-a8c0-160d23d57584+BR-1124028303@expmessaging.tripadvisor.com",
+    "firstName": "Shiena",
+    "lastName": "Manangan",
+    "phoneNumber": "US+1 (808) 280-0065",
+    "title": ""
+  },
+  "externalBookingReference": "1124028303",
+  "invoice": {
+    "bookingFee": "0",
+    "currency": "USD",
+    "due": "151.11",
+    "excludedTaxes": "[]",
+    "id": "233502021",
+    "includedTaxes": "[]",
+    "invoiceDate": "2024-04-06T21:28:16Z",
+    "lineItems": "[]",
+    "productInvoices": "[{'id': 116251825, 'title': 'Intro to Mexico Walking Tour: Tijuana Day Trip from San Diego - Fri, April 12 2024 - 10:30 AM', 'total': 151.11, 'due': 151.11, 'currency': 'USD', 'lineItems': [{'title': 'Intro to Mexico Walking Tour: Tijuana Day Trip from San Diego', 'quantity': 1, 'unitPrice': 151.11, 'discount': 0, 'total': 151.11, 'taxes': [], 'custom': True}], 'includedTaxes': [], 'excludedTaxes': []}]",
+    "total": "151.11"
+  },
+  "productBookings": "[{'id': 66555629, 'status': 'CONFIRMED', 'product': {'id': 92667, 'title': 'Intro to Mexico Walking Tour: Tijuana Day Trip from San Diego', 'category': 'ACTIVITIES'}}]",
+  "seller": {
+    "id": "5194",
+    "title": "Viator.com"
+  }
+}
