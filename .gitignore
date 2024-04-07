@@ -202,3 +202,5 @@ composer.phar
 
 *.code-workspace
 guiando.code-workspace
+
+/app/booking_logs
