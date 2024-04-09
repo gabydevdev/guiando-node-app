@@ -1,0 +1,397 @@
+/* stylelint-disable font-family-no-missing-generic-family-keyword */
+@use 'sass:color';
+@use 'sass:math';
+
+@mixin clearfix() {
+	&::before,
+	&::after {
+		content: " ";
+		display: table;
+	}
+
+	&::after {
+		clear: both;
+	}
+}
+
+// Webkit-style focus
+@mixin tab-focus() {
+	outline: thin dotted #000000;
+	outline: 5px auto -webkit-focus-ring-color;
+	outline-offset: -2px;
+}
+
+// Center-align a block level element
+@mixin center-block() {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+// Sizing shortcuts
+@mixin size($width, $height) {
+	height: $height;
+	width: $width;
+}
+
+@mixin square($size) {
+	@include size($size, $size);
+}
+
+@mixin flexbox(){
+	display: box;
+	display: flex;
+	display: flexbox;
+	display: flex;
+}
+
+@mixin flex(){
+	display: box;
+	display: flex;
+	display: flexbox;
+	display: flex;
+}
+
+@mixin flex-inline(){
+	display: inline-box;
+	display: inline-flex;
+	display: inline-flexbox;
+	display: inline-flex;
+}
+
+@mixin align-items($argument){
+	align-items: $argument;
+	-webkit-box-align: $argument;
+	-ms-flex-align: $argument;
+}
+
+@mixin flex-column{
+	-webkit-box-direction: normal;
+	-webkit-box-orient: vertical;
+	flex-direction: column;
+}
+
+@mixin flex-row{
+	-webkit-box-direction: normal;
+	-webkit-box-orient: horizontal;
+	flex-direction: row;
+}
+
+
+// Placeholder text
+@mixin placeholder($color, $opacity) {
+	&::placeholder {
+		color: $color;
+		font-family: $force-mac-font-family;
+		font-weight: 400;
+		opacity: $opacity;
+	}
+}
+
+// Placeholder text
+@mixin selected($color, $background) {
+	&::selection {
+		background: $background;
+		color: $color;
+	}
+}
+
+@mixin placeholder-height($height) {
+	&::placeholder {
+		line-height: $height;
+	}
+
+	&.placeholder {
+		line-height: $height;
+	}
+}
+
+// Text overflow
+// Requires inline-block or block for proper styling
+@mixin text-overflow() {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+// CSS image replacement
+@mixin text-hide() {
+	background-color: transparent;
+	border: 0;
+	color: transparent;
+	font: 0 / 0 a;
+	text-shadow: none;
+}
+
+@mixin invisible() {
+	visibility:hidden;
+}
+
+// Padding Helper Classes
+@mixin generate-paddings-options-prefix($prefix,$n, $j: 0) {
+	@if $j <= $n {
+		@for $i from $j through $n {
+			$step: $i * 5;
+			.#{$prefix}-p-t-#{$step} {
+				margin-top: ($step * 1px);
+			}
+			.#{$prefix}-p-r-#{$step} {
+				margin-right: ($step * 1px);
+			}
+			.#{$prefix}-p-l-#{$step} {
+				margin-left: ($step * 1px);
+			}
+			.#{$prefix}-p-b-#{$step} {
+				margin-bottom: ($step * 1px);
+			}
+
+			// @include generate-margin-options($n, ($i + 1));
+		}
+	}
+}
+
+// Margins Helper Classes
+@mixin generate-margin-options-prefix($prefix,$n, $j: 0) {
+	@if $j <= $n {
+		@for $i from $j through $n {
+			$step: $i * 5;
+			.#{$prefix}-m-t-#{$step} {
+				margin-top: ($step * 1px);
+			}
+			.#{$prefix}-m-r-#{$step} {
+				margin-right: ($step * 1px);
+			}
+			.#{$prefix}-m-l-#{$step} {
+				margin-left: ($step * 1px);
+			}
+			.#{$prefix}-m-b-#{$step} {
+				margin-bottom: ($step * 1px);
+			}
+
+			// @include generate-margin-options($n, ($i + 1));
+		}
+	}
+}
+
+// CSS3 PROPERTIES
+// --------------------------------------------------
+
+@mixin mask($arguments) {
+	mask: $arguments;
+}
+
+@mixin box-scale($scale) {
+	transform: scale($scale);
+}
+
+// Single side border-radius
+@mixin border-top-radius($radius) {
+	border-top-left-radius: $radius;
+	border-top-right-radius: $radius;
+}
+
+@mixin border-right-radius($radius) {
+	border-bottom-right-radius: $radius;
+	border-top-right-radius: $radius;
+}
+
+@mixin border-bottom-radius($radius) {
+	border-bottom-left-radius: $radius;
+	border-bottom-right-radius: $radius;
+}
+
+@mixin border-left-radius($radius) {
+	border-bottom-left-radius: $radius;
+	border-top-left-radius: $radius;
+}
+
+@mixin border-radius($radius) {
+	border-radius: $radius;
+}
+
+// Drop shadows
+@mixin box-shadow($shadow) {
+	box-shadow: $shadow;
+}
+
+@mixin animation($properties) {
+	animation: $properties;
+}
+
+// Transitions
+@mixin transition($transition) {
+	transition: $transition;
+}
+
+@mixin transition-property($transition-property) {
+	transition-property: $transition-property;
+}
+
+@mixin transition-delay($transition-delay) {
+	transition-delay: $transition-delay;
+}
+
+@mixin transition-duration($transition-duration) {
+	transition-duration: $transition-duration;
+}
+
+@mixin transition-transform($transition) {
+	transition: -webkit-transform $transition;
+	transition: -moz-transform $transition;
+	transition: -o-transform $transition;
+	transition: transform $transition;
+}
+
+// Transformations
+@mixin rotate($degrees) {
+	transform: rotate($degrees);
+}
+
+@mixin scale($ratio) {
+	transform: scale($ratio);
+}
+
+@mixin translate($x, $y) {
+	transform: translate($x, $y);
+}
+
+@mixin translate-y($y) {
+	transform: translateY($y);
+}
+
+@mixin translate-x($x) {
+	transform: translateX($x);
+}
+
+@mixin skew($x, $y) {
+	transform: skewX($x) skewY($y);
+	transform: skew($x, $y);
+}
+
+@mixin translate3d($x, $y, $z) {
+	transform: translate3d($x, $y, $z);
+	transform:translate($x, $y);
+}
+
+@mixin rotate-x($degrees) {
+	transform: rotateX($degrees);
+}
+
+@mixin rotate-y($degrees) {
+	transform: rotateY($degrees);
+}
+
+@mixin perspective($perspective) {
+	perspective: $perspective;
+}
+
+@mixin perspective-origin($perspective) {
+	perspective-origin: $perspective;
+}
+
+@mixin transform-origin($origin) {
+	transform-origin: $origin;
+}
+
+@mixin transform-style($style) {
+	transform-style: $style;
+}
+
+// Backface visibility
+// Prevent browsers from flickering when using CSS 3D transforms.
+// Default value is `visible`, but can be changed to `hidden`
+// See git pull https:// github.com / dannykeane / bootstrap.git backface-visibility for examples
+@mixin backface-visibility($visibility) {
+	backface-visibility: $visibility;
+}
+
+// Background clip
+@mixin background-clip($clip: border-box) {
+	background-clip: $clip;
+}
+
+// Box sizing
+@mixin box-sizing($boxmodel) {
+	box-sizing: $boxmodel;
+}
+
+// User select
+// For selecting text on the page
+@mixin user-select($select) {
+	user-select: $select;
+}
+
+// Resize anything
+@mixin resizable($direction) {
+	overflow: auto; // Safari fix
+	resize: $direction; // Options: horizontal, vertical, both;Options
+}
+
+// CSS3 Content Columns
+@mixin content-columns($column-count, $column-gap: $grid-gutter-width) {
+	column-count: $column-count;
+	column-gap: $column-gap;
+}
+
+// Optional hyphenation
+@mixin hyphens($mode: auto) {
+	hyphens: $mode;
+	word-wrap: break-word;
+}
+
+// Responsive image
+// Keep images from scaling beyond the width of their parents.
+@mixin img-responsive($display: block) {
+	display: $display;
+	height: auto; // Part 2: Scale the height according to the width, otherwise you get stretchingPart2Part2
+	max-width: 100%; // Part 1: Set a maximum relative to the parent;Part1
+}
+
+// Legibility standards, WCAG 2.0 - Returns black or white text color
+@function text-contrast($background-color) {
+	$color-brightness: math.round((color.red($background-color) * 299) + (color.green($background-color) * 587) + (color.blue($background-color) * 114) / 1000);
+	$light-color: math.round((color.red(#ffffff) * 299) + (color.green(#ffffff) * 587) + (color.blue(#ffffff) * 114) / 1000);
+
+	@if abs($color-brightness) < ($light-color / 2){
+		@return $f-color-light;
+	} @else {
+		@return $f-color-dark;
+	}
+}
+
+// Checks if two colors are contrasting (Legibility standards, WCAG 2.0) - Returns true or false
+@function contrast-checker($foreground, $background) {
+	$r: (max(color.red($foreground), color.red($background))) - (min(color.red($foreground), color.red($background)));
+	$g: (max(color.green($foreground), color.green($background))) - (min(color.green($foreground), color.green($background)));
+	$b: (max(color.blue($foreground), color.blue($background))) - (min(color.blue($foreground), color.blue($background)));
+	$sum-rgb: $r + $g + $b;
+
+	@if $sum-rgb < 500 {
+		@return false;
+	} @else {
+		@return true;
+	}
+}
+
+// Darkens or lightens a text color for Legibility standards
+@function fix-contrast($text-color, $background: #ffffff){
+	@if luma($background) > 0.5{
+		@while contrast-checker($text-color, $background) == false {
+			$text-color: color.adjust($text-color, $lightness: -1%);
+
+			@if contrast-checker($text-color, $background) {
+				@return $text-color;
+			}
+		}
+	} @else{
+		@while contrast-checker($text-color, $background) == false {
+			$text-color: color.adjust($text-color, $lightness: 1%);
+
+			@if contrast-checker($text-color, $background) {
+				@return $text-color;
+			}
+		}
+	}
+
+	@return $text-color;
+}

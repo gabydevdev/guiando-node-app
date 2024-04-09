@@ -1,0 +1,46 @@
+{
+	"extends": [
+		"stylelint-config-standard-scss",
+		"stylelint-config-sass-guidelines",
+		"@thoughtbot/stylelint-config"
+	],
+	"plugins": [
+		"stylelint-scss"
+	],
+	"rules": {
+        "no-duplicate-selectors": null,
+        "selector-max-compound-selectors": 10,
+		"at-rule-empty-line-before": [
+			"always",
+			{
+				"except": [
+					"after-same-name",
+					"blockless-after-same-name-blockless",
+					"blockless-after-blockless",
+					"first-nested"
+				],
+				"ignoreAtRules": [
+					"else",
+					"function",
+					"import",
+                    "media",
+					"mixin",
+					"use"
+				]
+			}
+		],
+        "scss/double-slash-comment-empty-line-before": [
+            "always",
+            {
+                "except": [
+                    "first-nested",
+                    "inside-block"
+                ],
+                "ignore": [
+                    "between-comments",
+                    "inside-block"
+                ]
+            }
+        ]
+	}
+}
