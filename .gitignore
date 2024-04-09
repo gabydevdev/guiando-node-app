@@ -184,9 +184,7 @@ composer.phar
 /.htaccess
 
 # custom ignores
-/wp
+app/booking_logs/
 
 *.code-workspace
 guiando.code-workspace
-
-/app/booking_logs
