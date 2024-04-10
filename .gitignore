@@ -139,7 +139,7 @@ dist
 
 # Project files should be checked into the repository, unless a significant
 # proportion of contributors will probably not be using Sublime Text
-# *.sublime-project
+*.sublime-project
 
 # SFTP configuration file
 sftp-config.json
@@ -161,12 +161,12 @@ bh_unicode_properties.cache
 # https://packagecontrol.io/packages/sublime-github
 GitHub.sublime-settings
 
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
+.vscode/
+# !.vscode/settings.json
+# !.vscode/tasks.json
+# !.vscode/launch.json
+# !.vscode/extensions.json
+# !.vscode/*.code-snippets
 
 # Local History for Visual Studio Code
 .history/
