@@ -24,6 +24,7 @@ module.exports = {
 		alias: {
 			"~": Path.resolve(__dirname, "../src"),
 		},
+        modules: [Path.resolve(__dirname, '../node_modules'), 'node_modules'],
 	},
 	module: {
 		rules: [

@@ -1,8 +1,6 @@
-@use "sass:color";
-
 $pages-root-url: "../";
-$base-img-url: "../img";
-$assets-url: "../../assets";
+$base-img-url: "../assets/images";
+$assets-url: "../assets/";
 
 // color palette
 $color-primary: #7252d3;
@@ -14,12 +12,12 @@ $color-info: #3b4752;
 $color-menu: #2b303b;
 
 // neutral color shades
-$color-contrast-lowest: #ffffff;
+$color-contrast-lowest: #fff;
 $color-contrast-higher: #212121;
 
 // constant colors
-$color-white: #ffffff;
-$color-black: #000000;
+$color-white: #fff;
+$color-black: #000;
 
 // color calibrator
 $saturation-shift: 18; // This value changes the saturation shift in shades
@@ -40,66 +38,66 @@ $mix-percentage-contrast-high: 81; // Body text
 // color shades and variable generation
 
 // primary-shade
-$color-primary-lighter: color.make-shade($color-primary, $mix-percentage-lighter, $saturation-shift, $hue-shift, -2);
-$color-primary-light: color.make-shade($color-primary, $mix-percentage-light, $saturation-shift, $hue-shift, -1);
-$color-primary-dark: color.make-shade($color-primary, $mix-percentage-dark, $saturation-shift, $hue-shift, 1);
-$color-primary-darker: color.make-shade($color-primary, $mix-percentage-darker, $saturation-shift, $hue-shift, 2);
+$color-primary-lighter: make-shade($color-primary, $mix-percentage-lighter, $saturation-shift, $hue-shift, -2);
+$color-primary-light: make-shade($color-primary, $mix-percentage-light, $saturation-shift, $hue-shift, -1);
+$color-primary-dark: make-shade($color-primary, $mix-percentage-dark, $saturation-shift, $hue-shift, 1);
+$color-primary-darker: make-shade($color-primary, $mix-percentage-darker, $saturation-shift, $hue-shift, 2);
 
 // success-shade
-$color-success-lighter: color.make-shade($color-success, $mix-percentage-lighter, $saturation-shift, $hue-shift, -2);
-$color-success-light: color.make-shade($color-success, $mix-percentage-light, $saturation-shift, $hue-shift, -1);
-$color-success-dark: color.make-shade($color-success, $mix-percentage-dark, $saturation-shift, $hue-shift, 1);
-$color-success-darker: color.make-shade($color-success, $mix-percentage-darker, $saturation-shift, $hue-shift, 2);
+$color-success-lighter: make-shade($color-success, $mix-percentage-lighter, $saturation-shift, $hue-shift, -2);
+$color-success-light: make-shade($color-success, $mix-percentage-light, $saturation-shift, $hue-shift, -1);
+$color-success-dark: make-shade($color-success, $mix-percentage-dark, $saturation-shift, $hue-shift, 1);
+$color-success-darker: make-shade($color-success, $mix-percentage-darker, $saturation-shift, $hue-shift, 2);
 
 // complete-shade
-$color-complete-lighter: color.make-shade($color-complete, $mix-percentage-lighter, $saturation-shift, $hue-shift, -2);
-$color-complete-light: color.make-shade($color-complete, $mix-percentage-light, $saturation-shift, $hue-shift, -1);
-$color-complete-dark: color.make-shade($color-complete, $mix-percentage-dark, $saturation-shift, $hue-shift, 1);
-$color-complete-darker: color.make-shade($color-complete, $mix-percentage-darker, $saturation-shift, $hue-shift, 2);
+$color-complete-lighter: make-shade($color-complete, $mix-percentage-lighter, $saturation-shift, $hue-shift, -2);
+$color-complete-light: make-shade($color-complete, $mix-percentage-light, $saturation-shift, $hue-shift, -1);
+$color-complete-dark: make-shade($color-complete, $mix-percentage-dark, $saturation-shift, $hue-shift, 1);
+$color-complete-darker: make-shade($color-complete, $mix-percentage-darker, $saturation-shift, $hue-shift, 2);
 
 // warning-shade
-$color-warning-lighter: color.make-shade($color-warning, $mix-percentage-lighter, $saturation-shift, $hue-shift, -2);
-$color-warning-light: color.make-shade($color-warning, $mix-percentage-light, $saturation-shift, $hue-shift, -1);
-$color-warning-dark: color.make-shade($color-warning, $mix-percentage-dark, $saturation-shift, $hue-shift, 1);
-$color-warning-darker: color.make-shade($color-warning, $mix-percentage-darker, $saturation-shift, $hue-shift, 2);
+$color-warning-lighter: make-shade($color-warning, $mix-percentage-lighter, $saturation-shift, $hue-shift, -2);
+$color-warning-light: make-shade($color-warning, $mix-percentage-light, $saturation-shift, $hue-shift, -1);
+$color-warning-dark: make-shade($color-warning, $mix-percentage-dark, $saturation-shift, $hue-shift, 1);
+$color-warning-darker: make-shade($color-warning, $mix-percentage-darker, $saturation-shift, $hue-shift, 2);
 
 // danger-shade
-$color-danger-lighter: color.make-shade($color-danger, $mix-percentage-lighter, $saturation-shift, $hue-shift, -2);
-$color-danger-light: color.make-shade($color-danger, $mix-percentage-light, $saturation-shift, $hue-shift, -1);
-$color-danger-dark: color.make-shade($color-danger, $mix-percentage-dark, $saturation-shift, $hue-shift, 1);
-$color-danger-darker: color.make-shade($color-danger, $mix-percentage-darker, $saturation-shift, $hue-shift, 2);
+$color-danger-lighter: make-shade($color-danger, $mix-percentage-lighter, $saturation-shift, $hue-shift, -2);
+$color-danger-light: make-shade($color-danger, $mix-percentage-light, $saturation-shift, $hue-shift, -1);
+$color-danger-dark: make-shade($color-danger, $mix-percentage-dark, $saturation-shift, $hue-shift, 1);
+$color-danger-darker: make-shade($color-danger, $mix-percentage-darker, $saturation-shift, $hue-shift, 2);
 
 // info-shade
-$color-info-lighter: color.make-shade($color-info, $mix-percentage-lighter, $saturation-shift, $hue-shift, -2);
-$color-info-light: color.make-shade($color-info, $mix-percentage-light, $saturation-shift, $hue-shift, -1);
-$color-info-dark: color.make-shade($color-info, $mix-percentage-dark, $saturation-shift, $hue-shift, 1);
-$color-info-darker: color.make-shade($color-info, $mix-percentage-darker, $saturation-shift, $hue-shift, 2);
+$color-info-lighter: make-shade($color-info, $mix-percentage-lighter, $saturation-shift, $hue-shift, -2);
+$color-info-light: make-shade($color-info, $mix-percentage-light, $saturation-shift, $hue-shift, -1);
+$color-info-dark: make-shade($color-info, $mix-percentage-dark, $saturation-shift, $hue-shift, 1);
+$color-info-darker: make-shade($color-info, $mix-percentage-darker, $saturation-shift, $hue-shift, 2);
 
 // Neutral color shades - #hex values
-$color-contrast-lower: color.mix($color-contrast-higher, $color-contrast-lowest, $mix-percentage-contrast-lower);
-$color-contrast-low: color.mix($color-contrast-higher, $color-contrast-lowest, $mix-percentage-contrast-low);
-$color-contrast-medium: color.mix($color-contrast-higher, $color-contrast-lowest, $mix-percentage-contrast-medium);
-$color-contrast-high: color.mix($color-contrast-higher, $color-contrast-lowest, $mix-percentage-contrast-high);
+$color-contrast-lower: color.mix($color-contrast-higher, $color-contrast-lowest, calc($mix-percentage-contrast-lower * 1%));
+$color-contrast-low: color.mix($color-contrast-higher, $color-contrast-lowest, calc($mix-percentage-contrast-low * 1%));
+$color-contrast-medium: color.mix($color-contrast-higher, $color-contrast-lowest, calc($mix-percentage-contrast-medium * 1%));
+$color-contrast-high: color.mix($color-contrast-higher, $color-contrast-lowest, calc($mix-percentage-contrast-high * 1%));
 
 // Neutral color shades - rgba values
-$color-contrast-lower-a: rgba($color-contrast-higher, $mix-percentage-contrast-lower / 10000%);
-$color-contrast-low-a: rgba($color-contrast-higher, $mix-percentage-contrast-low / 10000%);
-$color-contrast-medium-a: rgba($color-contrast-higher, $mix-percentage-contrast-medium / 10000%);
-$color-contrast-high-a: rgba($color-contrast-higher, $mix-percentage-contrast-high / 10000%);
+$color-contrast-lower-a: rgba($color-contrast-higher, calc(($mix-percentage-contrast-lower / 10000) * 1%));
+$color-contrast-low-a: rgba($color-contrast-higher, calc(($mix-percentage-contrast-low / 10000) * 1%));
+$color-contrast-medium-a: rgba($color-contrast-higher, calc(($mix-percentage-contrast-medium / 10000) * 1%));
+$color-contrast-high-a: rgba($color-contrast-higher, calc(($mix-percentage-contrast-high / 10000) * 1%));
 
 // Menu colors generation
-$color-menu-dark: color.mix($color-menu, #000000, 77%);
-$color-menu-darker: color.mix($color-menu, #000000, 90%);
+$color-menu-dark: color.mix($color-menu, #000, 77%);
+$color-menu-darker: color.mix($color-menu, #000, 90%);
 
 // Generating Menu font color
-$menu-mix-temp: color.mix($color-menu, #ffffff, 86%);
-$menu: color.blend-hardlight($menu-mix-temp, #ffffff);
+$menu-mix-temp: color.mix($color-menu, #fff, 86%);
+$menu: blend-hardlight($menu-mix-temp, #fff);
 $color-menu-light: $menu;
-$color-menu-link-hover: #ffffff;
+$color-menu-link-hover: #fff;
 
 // Secondary menu
-$_sidebar-background-color: color.blend-screen($color-menu, $color-menu); /* stylelint-disable-line scss/dollar-variable-pattern */
-$sidebar-background-color: color.mix($_sidebar-background-color, #000000, 48%);
+// $_sidebar-background-color: blend-screen($color-menu, $color-menu); /* stylelint-disable-line scss/dollar-variable-pattern */
+// $sidebar-background-color: color.mix($_sidebar-background-color, #000, 48%);
 
 // ================ COLOR ASSIGN ====================
 $dashboard-background: $color-contrast-lower; // Dashboard background color

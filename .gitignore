@@ -189,3 +189,5 @@ app/booking_logs/
 *.code-workspace
 guiando.code-workspace
 .vscode/snipsnap.code-snippets
+/app/booking_test_logs
+.vscode/settings.json

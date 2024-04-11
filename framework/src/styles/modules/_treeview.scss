@@ -1,31 +1,31 @@
-/*------------------------------------------------------------------
-[13. Treeview]
-*/
-
+/* stylelint-disable selector-max-id */
 span.dynatree-active a {
-  color: $color-contrast-higher !important;
-  background-color: transparent !important;
+	color: $color-contrast-higher;
+	background-color: transparent;
 }
 
 span.dynatree-selected a {
-  color: $color-contrast-higher !important;
-  font-style: normal;
+	color: $color-contrast-higher;
+	font-style: normal;
 }
+
 ul.dynatree-container a:focus,
 span.dynatree-focused a:link {
-  background-color: transparent;
+	background-color: transparent;
 }
+
 ul.dynatree-container {
-  background-color: transparent;
-  a:hover {
-    color: $color-contrast-high;
-    opacity: 0.7;
-    background-color: transparent;
-  }
+	background-color: transparent;
+
+	a:hover {
+		color: $color-contrast-high;
+		opacity: 0.7;
+		background-color: transparent;
+	}
 }
 
 ul.dynatree-container a {
-  color: $color-contrast-high;
+	color: $color-contrast-high;
 }
 
 span.dynatree-empty,
@@ -37,7 +37,7 @@ span.dynatree-checkbox,
 span.dynatree-radio,
 span.dynatree-drag-helper-img,
 #dynatree-drop-marker {
-  height: 17px;
-  position: relative;
-  top: 3px;
+	height: 17px;
+	position: relative;
+	top: 3px;
 }
