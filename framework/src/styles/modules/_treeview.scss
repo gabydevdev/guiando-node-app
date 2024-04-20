@@ -1,7 +1,7 @@
 /* stylelint-disable selector-max-id */
 span.dynatree-active a {
-	color: $color-contrast-higher;
 	background-color: transparent;
+	color: $color-contrast-higher;
 }
 
 span.dynatree-selected a {
@@ -18,9 +18,9 @@ ul.dynatree-container {
 	background-color: transparent;
 
 	a:hover {
+		background-color: transparent;
 		color: $color-contrast-high;
 		opacity: 0.7;
-		background-color: transparent;
 	}
 }
 
@@ -37,7 +37,7 @@ span.dynatree-checkbox,
 span.dynatree-radio,
 span.dynatree-drag-helper-img,
 #dynatree-drop-marker {
-	height: 17px;
 	position: relative;
 	top: 3px;
+	height: 17px;
 }

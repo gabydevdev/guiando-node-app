@@ -9,43 +9,43 @@
 	}
 
 	&::after {
+		position: absolute;
+		z-index: 0;
 		background-size: cover;
 		content: " ";
 		inset: 0;
-		position: absolute;
-		z-index: 0;
 		opacity: 0.69;
 	}
 }
 
 .widget-1 {
 	&::after {
+		position: absolute;
+		z-index: 0;
 		background-image: url("#{$assets-url}images/dashboard/pages_hero.jpg");
 		background-size: cover;
 		content: " ";
 		inset: 0;
-		position: absolute;
-		z-index: 0;
 		opacity: 0.69;
 	}
 
 	&::before {
+		position: absolute;
+		z-index: 1;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		height: 325px;
 		background-image: url("#{$assets-url}images/linear_gradient.png");
 		background-repeat: repeat-x;
 		content: " ";
-		left: 0;
-		right: 0;
-		height: 325px;
-		bottom: 0;
-		position: absolute;
-		z-index: 1;
 	}
 
 	> .card-body {
 		.company:nth-child(2) > div {
 			display: table;
-			margin: 0 auto;
 			width: 127px;
+			margin: 0 auto;
 		}
 	}
 
@@ -62,8 +62,8 @@
 	}
 
 	.label {
-		color: #fff;
 		background: rgb(255 255 255 / 30%);
+		color: #fff;
 	}
 }
 
@@ -83,10 +83,10 @@
 	}
 
 	.widget-3-fav {
+		display: flex;
+		padding: 9px 10px;
 		background: rgb(0 0 0 / 8%);
 		vertical-align: middle;
-		padding: 9px 10px;
-		display: flex;
 	}
 }
 
@@ -101,11 +101,11 @@
 }
 
 .widget-4-chart {
-	height: 100%;
-	width: 100%;
-	bottom: 0;
 	position: absolute;
 	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
 
 	&.line-chart .tick text,
 	.line-chart .nvd3 .nv-axis .nv-axisMaxMin text {
@@ -130,10 +130,10 @@
 }
 
 .widget-5-chart {
-	height: auto;
-	width: auto;
-	inset: 40px 20px 20px;
 	position: absolute;
+	width: auto;
+	height: auto;
+	inset: 40px 20px 20px;
 }
 
 .widget-6 {
@@ -156,8 +156,8 @@
 }
 
 .widget-7-chart {
-	inset: 0;
 	position: absolute;
+	inset: 0;
 
 	&.line-chart[data-points="true"]
 		.nvd3.nv-line
@@ -183,11 +183,11 @@
 }
 
 .widget-8-chart {
-	height: 100px;
-	width: 50%;
-	bottom: 0;
 	position: absolute;
 	right: 0;
+	bottom: 0;
+	width: 50%;
+	height: 100px;
 
 	.line-chart[data-points="true"]
 		.nvd3.nv-line
@@ -307,12 +307,12 @@
 
 .widget-14-chart_y_axis {
 	position: absolute;
-	top: 0;
-	background: rgb(255 255 255 / 80%);
-	bottom: 0;
-	width: 35px;
-	left: 0;
 	z-index: 2;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 35px;
+	background: rgb(255 255 255 / 80%);
 
 	.rickshaw_graph .y_ticks path,
 	.rickshaw_graph .x_ticks_d3 path {
@@ -322,9 +322,9 @@
 
 	.rickshaw_graph .y_ticks text,
 	.rickshaw_graph .x_ticks_d3 text {
-		opacity: 0.35;
 		font-family: $secondary-font-family;
 		font-size: 11px;
+		opacity: 0.35;
 	}
 
 	.y_ticks.plain g:first-child {
@@ -400,22 +400,22 @@
 }
 
 .btn-circle-arrow {
-	border: 1px solid #fff;
-	border-radius: 100px;
 	position: relative;
+	display: inline-block;
 	width: 20px;
 	height: 20px;
-	display: inline-block;
-	vertical-align: middle;
+	border: 1px solid #fff;
+	border-radius: 100px;
 	margin-right: 4px;
+	vertical-align: middle;
 
 	i {
-		font-size: 20px;
 		position: absolute;
-		left: 0;
 		top: 0;
-		margin-left: -1px;
+		left: 0;
 		margin-top: -1px;
+		margin-left: -1px;
+		font-size: 20px;
 	}
 }
 

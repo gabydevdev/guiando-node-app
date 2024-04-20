@@ -1,22 +1,22 @@
 /* stylelint-disable selector-max-id */
 /* stylelint-disable selector-class-pattern */
 .table {
-	margin-bottom: 0;
 	margin-top: 5px;
+	margin-bottom: 0;
 
 	thead {
 		tr {
 			th {
-				text-transform: uppercase;
-				font-weight: 500;
-				font-family: $secondary-font-family;
-				font-size: 10.5px;
-				letter-spacing: 0.06em;
 				padding-top: 14px;
 				padding-bottom: 14px;
-				vertical-align: middle;
 				border-bottom: 1px solid fade($color-contrast-low, 70%);
 				color: $color-contrast-high;
+				font-family: $secondary-font-family;
+				font-size: 10.5px;
+				font-weight: 500;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+				vertical-align: middle;
 
 				&[class*="sorting_"]:not([class="sorting_disabled"]) {
 					color: $color-contrast-high;
@@ -37,11 +37,11 @@
 	tbody {
 		tr {
 			td {
+				padding: 20px;
+				border-top: 0;
+				border-bottom: 1px solid fade($color-contrast-low, 70%);
 				background: $color-contrast-lowest;
 				color: $color-contrast-high;
-				border-bottom: 1px solid fade($color-contrast-low, 70%);
-				border-top: 0;
-				padding: 20px;
 				font-size: 13.5px;
 
 				.btn-tag {
@@ -114,8 +114,8 @@
 		thead {
 			tr {
 				th {
-					padding-left: 20px;
 					padding-right: 20px;
+					padding-left: 20px;
 				}
 			}
 		}
@@ -132,10 +132,10 @@
 		thead tr th,
 		tbody tr td,
 		tbody tr td *:not(.dropdown-default) {
-			white-space: nowrap;
-			vertical-align: middle;
 			overflow: hidden;
 			text-overflow: ellipsis;
+			vertical-align: middle;
+			white-space: nowrap;
 
 			&.reset-overflow * {
 				overflow: initial;
@@ -155,8 +155,8 @@
 
 					+ tr {
 						> td {
-							background: fade($body-background, 40%);
 							padding: 0 40px;
+							background: fade($body-background, 40%);
 
 							.table-inline {
 								margin-top: 13px;
@@ -176,8 +176,8 @@
 				&.row-details {
 					> td {
 						&:first-child::before {
-							content: "";
 							display: none;
+							content: "";
 						}
 					}
 				}
@@ -188,13 +188,13 @@
 					}
 
 					&:first-child::before {
-						content: "\e988";
-						display: inline-block;
-						font-size: 16px;
-						top: -1px;
 						position: relative;
+						top: -1px;
+						display: inline-block;
 						margin-right: 8px;
+						content: "\e988";
 						font-family: pages-icon;
+						font-size: 16px;
 						transition: all 0.12s linear;
 					}
 				}
@@ -226,9 +226,9 @@
 .dataTables_scroll {
 	&:hover {
 		.dataTables_scrollBody::before {
-			content: "";
 			top: 0;
 			height: 0;
+			content: "";
 		}
 	}
 }
@@ -238,10 +238,10 @@
 
 
 	&::before {
-		content: "";
 		position: absolute;
-		inset: 60px 0 0;
 		background: transparent;
+		content: "";
+		inset: 60px 0 0;
 	}
 }
 
@@ -288,10 +288,10 @@
 }
 
 .dataTables_wrapper .dataTables_info {
-	clear: none;
-	font-size: 12px;
 	padding: 0 33px;
+	clear: none;
 	color: $color-contrast-high;
+	font-size: 12px;
 }
 
 .dataTables_wrapper .dataTables_paginate ul > li {
@@ -309,8 +309,8 @@
 }
 
 .dataTables_wrapper .dataTables_paginate ul > li.active > a {
-	font-weight: bold;
 	color: $color-contrast-high;
+	font-weight: bold;
 	opacity: 1;
 }
 
@@ -351,10 +351,10 @@ table.dataTable thead .sorting_desc::after,
 table.dataTable thead .sorting_asc_disabled::after,
 table.dataTable thead .sorting_desc_disabled::after {
 	bottom: 12px;
-	content: "";
 	width: 19px;
 	height: 19px;
 	background-position: center center;
+	content: "";
 	opacity: 1;
 }
 
@@ -420,9 +420,9 @@ table.dataTable.table-condensed .sorting_desc::after {
 
 		> div {
 			display: flex;
-			justify-content: space-between;
 			width: 100%;
 			flex-direction: row-reverse;
+			justify-content: space-between;
 		}
 	}
 
@@ -461,9 +461,9 @@ table.dataTable.table-condensed .sorting_desc::after {
 
 	.dataTables_wrapper .dataTables_info,
 	.dataTables_wrapper .dataTables_paginate {
-		margin-top: 0;
-		padding-left: 0;
 		padding-right: 0;
+		padding-left: 0;
+		margin-top: 0;
 		margin-bottom: 10px;
 
 		ul {
@@ -475,9 +475,9 @@ table.dataTable.table-condensed .sorting_desc::after {
 @media (max-width: 480px) {
 	.dataTables_wrapper .dataTables_info,
 	.dataTables_wrapper .dataTables_paginate {
+		display: block;
+		clear: both;
 		float: none;
 		text-align-last: left;
-		clear: both;
-		display: block;
 	}
 }

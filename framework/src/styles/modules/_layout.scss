@@ -1,145 +1,22 @@
-.fixed-header {
-	.header {
-		position: fixed;
-		left: 0;
-		top: 0;
-		user-select: none;
-	}
-}
-
-.no-header {
-	.page-container .page-content-wrapper .content {
-		padding-top: 0;
-	}
-
-	.header {
-		border-bottom-color: transparent;
-	}
-}
-
-.dashboard {
-	background: $dashboard-background;
-
-	.page-container {
-		background: $dashboard-background;
-	}
-}
-
-.menu-pin {
-	.overlay {
-		padding-left: 0;
-
-		.overlay-brand {
-			margin-left: 0;
-		}
-	}
+body {
+	overflow: hidden;
+	max-width: 100%;
+	min-height: 100vh;
+	// min-height: -webkit-fill-available;
 }
 
 .page-container {
-	width: 100%;
-	height: 100%;
-	padding-left: $layout-sidepanel-width-collapsed;
-
-	.page-content-wrapper {
-		min-height: 100%;
-		position: relative;
-
-		.content {
-			z-index: 10;
-			padding-top: $layout-header-height;
-			padding-bottom: 69px;
-			min-height: 100%;
-			transition: all 0.3s ease;
-
-			&.full-width {
-				width: 100%;
-			}
-
-			.content-inner {
-				display: inline-block;
-				vertical-align: top;
-				height: 100%;
-				padding-left: 30px;
-				position: relative;
-			}
-
-			&:only-child {
-				padding-bottom: 0;
-			}
-
-			&.overlay-footer {
-				padding-bottom: 0;
-			}
-		}
-
-		.footer {
-			width: auto;
-			position: absolute;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			transition: left 0.3s ease;
-
-			&.fixed {
-				position: fixed;
-			}
-		}
-	}
+	padding-left: $layout-sidepanel-width;
 }
 
-.page-title {
-	margin-top: 0;
-}
-
-.group-container {
-	white-space: nowrap;
-
-	.single-group {
-		vertical-align: top;
-		display: inline-block;
-		white-space: normal;
-	}
-}
-
-.jumbotron {
+.page-content-wrapper {
 	position: relative;
-	overflow: hidden;
-	display: block;
-	padding: 0;
+	padding-top: 92px;
 
-	.inner {
-		position: relative;
-		z-index: 2;
-	}
-
-	&.lg {
-		height: 495px;
-	}
-
-	background-color: $color-contrast-lowest;
-
-	.cover-photo {
+	.footer {
 		width: 100%;
-		height: inherit;
-		overflow: hidden;
-		transition: opacity 0.3s ease;
-		background-size: cover;
-		background-color: $color-success;
-
-		img {
-			display: none;
-		}
+		transition: left 0.3s ease;
 	}
-
-	h1 {
-		font-size: 44px;
-	}
-}
-
-.container-fluid {
-	padding-left: 30px;
-	padding-right: 30px;
-	position: relative;
 }
 
 .copyright {
@@ -149,15 +26,4 @@
 
 .pager {
 	margin: 0;
-}
-
-@media (min-width: 1400px) {
-	.container,
-	.container-lg,
-	.container-md,
-	.container-sm,
-	.container-xl,
-	.container-xxl {
-		max-width: 1140px;
-	}
 }

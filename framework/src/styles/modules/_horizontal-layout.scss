@@ -11,28 +11,28 @@ $hm-mobile-sub-height: 40px;
 }
 
 .horizontal-menu-backdrop {
-	background: rgb(0 0 0 / 50%);
 	position: fixed;
-	inset: 0;
 	z-index: 0;
-	transition: opacity 0.3s ease;
 	display: none;
+	background: rgb(0 0 0 / 50%);
+	inset: 0;
+	transition: opacity 0.3s ease;
 }
 
 .horizontal-app-menu {
 	.menu-bar {
 		position: fixed;
+		z-index: 1;
 		top: 0;
 		bottom: 0;
-		background-color: $color-menu;
-		width: 270px;
 		left: -270px;
-		overflow-y: auto;
-		transition: transform 400ms cubic-bezier($menu-bezier);
-		backface-visibility: hidden;
-		perspective: 1000;
+		width: 270px;
 		flex-direction: column;
-		z-index: 1;
+		backface-visibility: hidden;
+		background-color: $color-menu;
+		overflow-y: auto;
+		perspective: 1000;
+		transition: transform 400ms cubic-bezier($menu-bezier);
 
 		&.open {
 			transform: translate3d(100%, 0, 0);
@@ -55,60 +55,59 @@ $hm-mobile-sub-height: 40px;
 			width: 100%;
 
 			li {
-				min-height: 45px;
 				display: flex;
+				width: 100%;
+				min-height: 45px;
 				flex-direction: column;
 
 				> ul {
-					overflow: hidden;
-					margin-top: 6px;
 					position: static;
-					background: $color-menu-dark;
-					opacity: 1;
-                    padding: 12px 0 10px 10px;
-					min-width: 0;
 					left: 0;
+					overflow: hidden;
+					min-width: 0;
+                    padding: 12px 0 10px 10px;
+					margin-top: 6px;
+					background: $color-menu-dark;
 					box-shadow: none;
+					opacity: 1;
 
 					&::before {
 						display: none;
 					}
 
 					> li {
-						padding-left: 0;
 						min-height: $hm-mobile-sub-height;
+						padding-left: 0;
 
 						> a {
-							font-size: 13px;
 							padding-top: 0;
 							padding-bottom: 0;
+							font-size: 13px;
 							line-height: $hm-mobile-sub-height;
 						}
 					}
 				}
 
-				width: 100%;
-
 				a {
-					font-family: $interface-font-family, sans-serif;
 					display: inline-block;
-					padding-left: $hm-mobile-left-padding;
-					padding-right: $hm-mobile-right-padding;
-					min-height: 40px;
-					line-height: 40px;
-					font-size: 14px;
-					clear: both;
-					white-space: nowrap;
 					overflow: hidden;
-					text-overflow: ellipsis;
 					width: 100%;
+					min-height: 40px;
+					padding-right: $hm-mobile-right-padding;
+					padding-left: $hm-mobile-left-padding;
+					clear: both;
+					font-family: $interface-font-family, sans-serif;
+					font-size: 14px;
+					line-height: 40px;
+					text-overflow: ellipsis;
+					white-space: nowrap;
 
 					> .arrow {
+						padding-left: 17px;
 						float: right;
 						rotate: 90deg;
-						transition: all 0.12s ease;
 						transform-origin: 90% 50%;
-						padding-left: 17px;
+						transition: all 0.12s ease;
 
 						&.open {
 							rotate: 0;
@@ -126,26 +125,26 @@ $hm-mobile-sub-height: 40px;
 					}
 
 					> a {
+						padding-left: $hm-mobile-left-padding;
+						color: #fff;
 						opacity: 1;
 						transform: none;
-						color: #fff;
-						padding-left: $hm-mobile-left-padding;
 					}
 				}
 			}
 		}
 
 		.search-link {
-			background: fade($color-menu-light, 10%);
 			display: block;
-			height: 54px;
 			width: 100%;
-			margin: 0;
-			padding-left: $hm-mobile-left-padding;
-			padding-right: $hm-mobile-left-padding;
-			color: $color-menu-light;
+			height: 54px;
 			flex-shrink: 0;
+			padding-right: $hm-mobile-left-padding;
+			padding-left: $hm-mobile-left-padding;
+			margin: 0;
 			margin-top: auto;
+			background: fade($color-menu-light, 10%);
+			color: $color-menu-light;
 
 			i {
 				margin: 0;
@@ -154,9 +153,9 @@ $hm-mobile-sub-height: 40px;
 
 		.toggle-sidebar {
 			width: 35px;
-			text-align: center;
-            margin: 7px 10px 10px 8px;
 			padding: 10px;
+            margin: 7px 10px 10px 8px;
+			text-align: center;
 		}
 	}
 

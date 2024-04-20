@@ -8,14 +8,14 @@
 	.header {
 		display: block;
 		height: auto;
+		flex-shrink: 0;
 		background-color: $color-menu;
 		color: $color-menu-light;
-		flex-shrink: 0;
 
 		.header-inner {
+			position: relative;
 			height: 60px;
 			background-color: transparent;
-			position: relative;
 			color: $color-menu-light;
 		}
 
@@ -42,10 +42,10 @@
 		.header-inner {
 			.brand.inline {
 				position: relative;
-				border-right: 1px solid #40444d;
-				padding-right: 15px;
-				margin-right: 0;
 				width: auto;
+				padding-right: 15px;
+				border-right: 1px solid #40444d;
+				margin-right: 0;
 
 				> img {
 					width: auto;
@@ -58,12 +58,12 @@
 		}
 
 		.page-title {
-			color: $color-menu-light;
-			font-size: 21px;
-			line-height: 21px;
-			font-weight: normal;
 			margin-bottom: 0;
 			margin-left: 15px;
+			color: $color-menu-light;
+			font-size: 21px;
+			font-weight: normal;
+			line-height: 21px;
 		}
 
 		.header-icon {
@@ -85,34 +85,34 @@
 	}
 
 	.menu-bar {
+		position: relative;
 		display: flex;
 		flex-direction: row;
-		position: relative;
 		color: $color-menu-light;
 
 		ul {
-			margin: 0;
 			padding: 0;
-			list-style: none;
 			border-radius: 3px;
+			margin: 0;
+			list-style: none;
 
 			li a {
 				.arrow {
 					position: relative;
 					display: inline-flex;
+					width: 23px;
 					align-items: center;
 					padding-left: 15px;
-					width: 23px;
 
 					&::before {
-						font-size: 16px;
-						font-family: pages-icon;
-						height: auto;
-						content: "\e989";
-						text-shadow: none;
 						position: relative;
 						top: 2px;
+						height: auto;
+						content: "\e989";
+						font-family: pages-icon;
+						font-size: 16px;
 						rotate: -90deg;
+						text-shadow: none;
 						transition: all 0.12s ease;
 					}
 				}
@@ -128,37 +128,37 @@
 				}
 
 				.sub-menu {
-					left: 50%;
+					position: absolute;
+					z-index: 1;
 					top: 0;
-					visibility: hidden;
-					opacity: 0;
+					left: 50%;
 					min-width: calc(100% + 4px);
 					padding: 18px $menu-padding;
 					background: $color-contrast-lowest;
-					z-index: 1;
-					position: absolute;
 					box-shadow: rgb(15 15 15 / 8%) 0 4px 12px, rgb(15 15 15 / 20%) 0 9px 24px;
+					opacity: 0;
 					transform: translate3d(15px, 0, 0);
 					transition: all 0.15s ease-in;
+					visibility: hidden;
 
 					li a {
-						min-width: 50px;
-						width: 100%;
-						padding: 4px 0;
-						white-space: nowrap;
-						overflow: hidden;
-						text-overflow: ellipsis;
 						display: block;
+						overflow: hidden;
+						width: 100%;
+						min-width: 50px;
+						padding: 4px 0;
 						font-weight: 400;
 						opacity: 0.8;
+						text-overflow: ellipsis;
+						white-space: nowrap;
 					}
 				}
 
 				&:hover {
 					> .sub-menu {
-						visibility: visible;
 						opacity: 1;
                         transform: translate3d(calc(34% + 0.5px), 0, 0);
+						visibility: visible;
 					}
 				}
 			}
@@ -169,11 +169,11 @@
 			flex-flow: row nowrap;
 
 			> li {
-				flex: 1 0 auto;
+				position: relative;
 				display: inline-flex;
+				flex: 1 0 auto;
 				align-items: center;
 				padding: 0;
-				position: relative;
 
 				&:hover:not(.open) {
 					> a {
@@ -198,21 +198,21 @@
 				}
 
 				> ul {
-					display: none;
-					opacity: 0;
-					list-style: none;
-					border: 0;
+					position: absolute;
+					z-index: 2;
 					top: -7px;
 					left: -4px;
+					display: none;
 					min-width: calc(100% + 4px);
 					padding: 0 $menu-padding;
 					padding-top: 60px;
 					padding-bottom: 18px;
+					border: 0;
 					background: $color-contrast-lowest;
-					color: $color-contrast-high;
-					z-index: 2;
-					position: absolute;
 					box-shadow: rgb(15 15 15 / 8%) 0 4px 12px, rgb(15 15 15 / 20%) 0 9px 24px;
+					color: $color-contrast-high;
+					list-style: none;
+					opacity: 0;
 
 
 					.arrow {
@@ -227,32 +227,32 @@
 						display: block;
 
 						&::before {
-							content: "";
 							position: absolute;
-							height: 1px;
 							top: $navbar-width + 7px;
 							width: calc(100% - $menu-padding * 2);
+							height: 1px;
 							background-color: $color-border-a;
+							content: "";
 						}
 
 						> li {
 							padding-left: 0;
-							transform: translate3d(0, -10px, 0);
 							opacity: 0;
+							transform: translate3d(0, -10px, 0);
 							transition: all 0.18s ease;
 
 
 							> a {
-								min-width: 50px;
-								width: 100%;
-								padding: 4px 0;
-								white-space: nowrap;
-								overflow: hidden;
-								text-overflow: ellipsis;
 								display: flex;
+								overflow: hidden;
+								width: 100%;
+								min-width: 50px;
 								justify-content: space-between;
+								padding: 4px 0;
 								font-weight: 400;
 								opacity: 0.8;
+								text-overflow: ellipsis;
+								white-space: nowrap;
 
 								> .arrow::before {
 									rotate: 180deg;
@@ -268,10 +268,10 @@
 					}
 
 					> a {
-						transform: translate3d(0, -10px, 0);
-						opacity: 0;
-						transition: all 0.18s ease;
 						color: $color-contrast-high;
+						opacity: 0;
+						transform: translate3d(0, -10px, 0);
+						transition: all 0.18s ease;
 					}
 				}
 
@@ -280,16 +280,16 @@
 						opacity: 1;
 
 						> li {
-							transform: translate3d(0, 0, 0);
 							opacity: 1;
+							transform: translate3d(0, 0, 0);
 						}
 					}
 
 					> a {
 						position: relative;
 						z-index: 10;
-						transform: translate3d(0, 0, 0);
 						opacity: 1;
+						transform: translate3d(0, 0, 0);
 					}
 				}
 
@@ -298,14 +298,14 @@
 						opacity: 0;
 
 						> li {
-							transform: translate3d(0, -10px, 0);
 							opacity: 0;
+							transform: translate3d(0, -10px, 0);
 						}
 					}
 
 					> a {
-						transform: translate3d(0, -10px, 0);
 						opacity: 0;
+						transform: translate3d(0, -10px, 0);
 					}
 				}
 			}
@@ -317,8 +317,8 @@
 	}
 
 	.secondary-sidebar {
-		margin-left: -25px;
 		border: 1px solid $color-border-a;
+		margin-left: -25px;
 
 		.main-menu > li.active {
 			background: transparent;
@@ -342,22 +342,22 @@
 	}
 
 	.ghost-nav-dropdown {
+		position: absolute;
+		z-index: 1000;
 		top: -7px;
 		left: -4px;
-		background: $color-contrast-lowest;
-		z-index: 1000;
-		position: absolute;
-		box-shadow: rgb(15 15 15 / 8%) 0 4px 12px, rgb(15 15 15 / 20%) 0 9px 24px;
 		border-radius: 3px;
+		background: $color-contrast-lowest;
+		box-shadow: rgb(15 15 15 / 8%) 0 4px 12px, rgb(15 15 15 / 20%) 0 9px 24px;
 		transition: all 0.18s ease-in;
 	}
 
 	.calendar {
 		.calendar-header {
-			background-color: transparent;
-			padding-left: 0;
 			position: relative;
 			left: -20px;
+			padding-left: 0;
+			background-color: transparent;
 		}
 
 		.options {
@@ -369,8 +369,8 @@
 		}
 
 		.weeks-wrapper {
-			margin-left: 0;
 			padding-left: 0;
+			margin-left: 0;
 		}
 
 		.week-dragger {

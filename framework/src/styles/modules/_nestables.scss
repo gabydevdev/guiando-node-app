@@ -10,8 +10,8 @@
 
 .dark {
 	.dd-handle {
-		color: $color-contrast-high;
 		background: $color-contrast-lower;
+		color: $color-contrast-high;
 
 		&:hover {
 			background-color: fade($color-contrast-lower, 60%);
@@ -24,8 +24,8 @@
 }
 
 .dd3-content {
-	background: $color-contrast-lowest;
 	border-color: fade($color-contrast-low, 70%);
+	background: $color-contrast-lowest;
 	color: $color-contrast-high;
 
 	&:hover {
@@ -38,37 +38,37 @@
 	text-indent: 9999px;
 
 	&::before {
-		font-family: pages-icon;
+		top: 4px;
 		color: $color-contrast-high;
 		content: "\e912";
-		top: 4px;
+		font-family: pages-icon;
 	}
 }
 
 .dd-placeholder {
-	background: $color-contrast-lower;
 	border-color: fade($color-contrast-high, 35%);
+	background: $color-contrast-lower;
 }
 
 .dd-empty {
-	background-image: none;
-	background-color: $color-contrast-lower;
 	border-color: fade($color-contrast-high, 50%);
+	background-color: $color-contrast-lower;
+	background-image: none;
 }
 
 .dd-item > button {
 	font-size: 11px;
 
 	&::before {
-		font-family: pages-icon;
 		content: "\e988";
+		font-family: pages-icon;
 	}
 }
 
 /* stylelint-disable-next-line selector-no-qualifying-type */
 .dd-item > button[data-action="collapse"]::before {
-	font-family: pages-icon;
 	content: "\e986";
+	font-family: pages-icon;
 }
 
 @media only screen and (min-width: 700px) {
