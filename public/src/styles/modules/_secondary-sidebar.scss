@@ -1,0 +1,278 @@
+/* stylelint-disable selector-no-qualifying-type */
+.inner-content {
+	overflow: auto;
+	min-height: 100%;
+	padding: 0;
+	margin-top: 0;
+	margin-left: $secondary-sidebar-width;
+}
+
+.toggle-secondary-sidebar {
+	display: none;
+}
+
+.secondary-sidebar {
+	position: fixed;
+	width: $secondary-sidebar-width;
+	height: 100%;
+	padding: 20px 20px 47px 0;
+	background: $color-contrast-lowest;
+	float: left;
+
+	&.not-fixed {
+		position: inherit;
+	}
+
+	&.open {
+		position: fixed;
+		display: block;
+		visibility: hidden;
+	}
+
+	.btn-compose {
+		font-family: $secondary-font-family;
+		font-size: 13px;
+		font-weight: normal;
+		letter-spacing: 0.02em;
+		text-transform: uppercase;
+	}
+
+	.menu-title {
+		color: $color-contrast-medium;
+		font-family: $secondary-font-family;
+		font-size: 10.8px;
+		font-weight: normal;
+		letter-spacing: 0.03em;
+	}
+
+	.menu-title {
+		padding-left: 30px;
+	}
+
+	> ul > li {
+		padding-left: 0;
+	}
+
+	ul {
+		li {
+			a {
+				display: flex;
+				padding-right: 10px;
+				padding-left: 30px;
+
+				> .icon-thumbnail {
+					display: flex;
+					width: auto;
+					height: auto;
+					line-height: auto;
+
+					> svg {
+						align-self: center;
+					}
+				}
+
+				&.active {
+					color: $color-contrast-higher;
+				}
+
+				> .title {
+					display: flex;
+					width: 100%;
+					align-items: center;
+					align-self: center;
+
+					&::after {
+						display: none;
+					}
+				}
+
+				> .badge {
+					align-self: center;
+				}
+
+				> .arrow {
+					&::before {
+						display: inline;
+						height: auto;
+						content: "\e989";
+						float: right;
+						font-family: pages-icon;
+						font-size: 16px;
+						font-weight: 300;
+						text-shadow: none;
+						transition: all 0.12s ease;
+					}
+				}
+			}
+
+			ul {
+				padding-top: 7px;
+				padding-bottom: 5px;
+				padding-left: 7px;
+				margin: 0;
+
+				li {
+					padding: 0;
+					margin-top: 5px;
+					margin-bottom: 9px;
+				}
+			}
+
+			&.open {
+				> a {
+					color: $color-contrast-higher;
+
+					.arrow::before {
+						rotate: -90deg;
+					}
+				}
+
+				> ul {
+					display: block;
+				}
+			}
+
+			> ul {
+				display: none;
+			}
+		}
+	}
+
+	.main-menu {
+		padding-left: 0;
+
+		> li {
+			border-bottom-right-radius: 16px;
+			border-top-right-radius: 16px;
+			list-style: none;
+
+			&.active {
+				background: $color-contrast-lower;
+
+				> a {
+					color: $color-complete;
+
+					&:hover {
+						color: $color-complete;
+					}
+
+					> .title {
+						&::after {
+							position: absolute;
+							top: 6.5px;
+							right: -14px;
+							width: 7px;
+							height: 7px;
+							border-radius: 50%;
+							background: $color-complete;
+							content: "";
+						}
+					}
+				}
+			}
+
+			a {
+				color: $color-contrast-high;
+				font-size: 14px;
+				font-weight: 400;
+				line-height: 32px;
+
+				&:hover {
+					color: $color-contrast-higher;
+				}
+
+				> .title {
+					i {
+						margin-right: 6px;
+						opacity: 0.9;
+					}
+				}
+			}
+		}
+	}
+
+	.sub-menu {
+		margin-left: 23px;
+
+		li {
+			padding: 0;
+			list-style: none;
+
+			&.active {
+				a {
+					color: $color-contrast-higher;
+				}
+			}
+
+			a {
+				color: $color-contrast-high;
+				font-weight: 400;
+				line-height: 25px;
+
+				&:hover {
+					color: $color-contrast-higher;
+				}
+			}
+		}
+	}
+
+	.sub-menu li a,
+	.main-menu li a {
+		.badge {
+			background: transparent;
+			color: $color-menu-light;
+			font-size: 13px;
+			line-height: 25px;
+		}
+	}
+
+	&.light {
+		border-right: 1px solid $color-border-a;
+		background-color: #fff;
+
+		.menu-title {
+			color: fade($color-menu-light, 60%);
+			opacity: 1;
+		}
+
+		.icon-thumbnail {
+			background-color: transparent;
+		}
+
+		.main-menu {
+			li {
+				a {
+					&:hover {
+						color: $color-contrast-higher;
+					}
+				}
+
+				&.active {
+					> a {
+						color: $color-contrast-higher;
+					}
+				}
+			}
+		}
+
+		.sub-menu {
+			margin-top: 5px;
+
+			li {
+				&.active {
+					a {
+						color: $color-contrast-higher;
+					}
+				}
+
+				a {
+					color: fade($color-menu-light, 60%);
+
+					&:hover {
+						color: $color-contrast-higher;
+					}
+				}
+			}
+		}
+	}
+}

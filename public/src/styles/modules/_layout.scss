@@ -1,0 +1,27 @@
+body {
+	max-width: 100%;
+	min-height: 100vh;
+}
+
+.page-container {
+	padding-left: $layout-sidepanel-width;
+}
+
+.page-content-wrapper {
+	position: relative;
+	padding-top: 92px;
+
+	.footer {
+		width: 100%;
+		transition: left 0.3s ease;
+	}
+}
+
+.copyright {
+	padding: 25px 0;
+	border-top: 1px solid $color-contrast-low;
+}
+
+.pager {
+	margin: 0;
+}

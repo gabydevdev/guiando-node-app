@@ -1,0 +1,33 @@
+.page-sidebar {
+	position: fixed;
+	z-index: $z-index-sidebar;
+	overflow: hidden;
+	width: $layout-sidepanel-width;
+	background-color: $color-menu;
+	transition: transform 400ms cubic-bezier($menu-bezier);
+}
+
+.sidebar-header {
+	height: $layout-header-height;
+
+	.brand {
+		height: $layout-header-height;
+
+		img,
+		svg {
+			width: auto;
+			height: 100%;
+		}
+	}
+}
+
+.sidebar-menu {
+	padding-top: 60px;
+
+	.list-group {
+		&-item {
+			border-width: 0;
+			background-color: transparent;
+		}
+	}
+}

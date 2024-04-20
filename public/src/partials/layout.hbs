@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html data-bs-theme="dark">
 
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<title>{{title}}</title>
 
 	{{! common used source styles and scripts }}
@@ -16,17 +16,24 @@
 </head>
 
 <body>
-	{{> header}}
+	{{> sidebar}}
 
-	<div class="container">
-		{{! output content block defined in a parent template }}
-		{{#block 'content'}}{{/block}}
+	<div class="page-container vh-100 w-100">
+		{{> toolbar}}
+
+		<!-- START PAGE CONTENT WRAPPER -->
+		<div class="page-content-wrapper d-flex flex-column vh-100">
+			{{! output content block defined in a parent template }}
+			{{#block 'content'}}{{/block}}
+
+			{{! if the block is not defined in a parent template, then output default content }}
+			{{#block 'custom_block'}}<p class="custom">default block content</p>{{/block}}
+
+			{{> footer }}
+		</div>
+		<!-- END PAGE CONTENT WRAPPER -->
+
 	</div>
-
-	{{! if the block is not defined in a parent template, then output default content }}
-	{{#block 'custom_block'}}<p class="custom">default block content</p>{{/block}}
-
-	{{> footer }}
 </body>
 
 </html>

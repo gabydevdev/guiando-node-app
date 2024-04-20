@@ -1,6 +1,14 @@
-$body-color: #6a5acd;
+@use "sass:color";
+@use "sass:math";
 
-body {
-	color: $body-color;
-	font-family: sans-serif;
-}
+// Bootstrap
+@import "bootstrap";
+
+// Mixins tools
+@import "mixins";
+
+// Import Vars
+@import "var";
+
+// Includes of Modules
+@import "modules";
