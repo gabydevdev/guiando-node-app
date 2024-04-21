@@ -1,5 +1,15 @@
 {{assign title='webpack starter'}}
 
+{{! define the block with page-specific scripts }}
+{{#partial 'scripts'}}
+<script src="./home/home.js" defer="defer"></script>
+{{/partial}}
+
+{{! define the block with page-specific styles }}
+{{#partial 'styles'}}
+<link href="./home/home.scss" rel="stylesheet">
+{{/partial}}
+
 {{! define the block content: include the `home/content.hbs` partial }}
 {{#partial 'content'}}
 {{> home/content}}

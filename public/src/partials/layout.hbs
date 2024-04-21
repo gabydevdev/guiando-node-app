@@ -18,16 +18,19 @@
 <body>
 	{{> sidebar}}
 
-	<div class="page-container vh-100 w-100">
+	<div class="page-container d-flex flex-column min-vh-100 w-100">
 		{{> toolbar}}
 
 		<!-- START PAGE CONTENT WRAPPER -->
-		<div class="page-content-wrapper d-flex flex-column vh-100">
-			{{! output content block defined in a parent template }}
-			{{#block 'content'}}{{/block}}
+		<div class="page-content-wrapper d-flex flex-column flex-fill p-3">
 
-			{{! if the block is not defined in a parent template, then output default content }}
-			{{#block 'custom_block'}}<p class="custom">default block content</p>{{/block}}
+			<div class="container-fluid flex-fill p-0">
+				{{! output content block defined in a parent template }}
+				{{#block 'content'}}{{/block}}
+
+				{{! if the block is not defined in a parent template, then output default content }}
+				{{#block 'custom_block'}}<p class="custom">default block content</p>{{/block}}
+			</div>
 
 			{{> footer }}
 		</div>
