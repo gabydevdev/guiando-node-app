@@ -21,29 +21,35 @@ if (baseUrlPath) {
 // Middleware to parse JSON bodies in incoming requests
 app.use(express.json());
 
-const bookingsDir = path.join(__dirname, "booking_logs");
+// To do: change name of folder to bookings_data
+const testDir = path.join(__dirname, "booking_test_logs");
 
+// To do: change name of entry point to api/single_booking
 app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
-	fs.readdir(bookingsDir, (err, files) => {
+	const bookingIdQuery = req.query.bookingId; // Retrieve the bookingId from query parameters
+	fs.readdir(testDir, (err, files) => {
 		if (err) {
 			console.error("Could not list the directory.", err);
 			res.status(500).send("Internal server error");
 			return;
 		}
 
-		const bookings = [];
+		let bookings = [];
 		files.forEach((file) => {
-			const filePath = path.join(bookingsDir, file);
-			const bookingData = fs.readFileSync(filePath);
-			bookings.push(JSON.parse(bookingData));
+			const filePath = path.join(testDir, file);
+			const bookingData = JSON.parse(fs.readFileSync(filePath, "utf8"));
+
+			if (!bookingIdQuery || bookingData.bookingId === bookingIdQuery) {
+				bookings.push(bookingData);
+			}
 		});
 
+		// Optionally, sort and paginate results here if necessary
 		res.json(bookings);
 	});
 });
 
-const testDir = path.join(__dirname, "booking_test_logs");
-
+// To do: change name of entry point to api/bookings
 app.get(`${baseUrlPath}/api/test`, (req, res) => {
 	fs.readdir(testDir, (err, files) => {
 		if (err) {
@@ -58,10 +64,10 @@ app.get(`${baseUrlPath}/api/test`, (req, res) => {
 		});
 
 		// Get query parameters for pagination and limit
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 5; // Default is 5, can be overridden by query parameter
-        const startIndex = (page - 1) * limit;
-        const endIndex = startIndex + limit;
+		const page = parseInt(req.query.page) || 1;
+		const limit = parseInt(req.query.limit) || 5; // Default is 5, can be overridden by query parameter
+		const startIndex = (page - 1) * limit;
+		const endIndex = startIndex + limit;
 
 		const testLogs = [];
 		files.slice(startIndex, endIndex).forEach((file) => {
