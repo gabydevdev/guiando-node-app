@@ -1,5 +1,7 @@
 const Path = require('path');
 const HtmlBundlerPlugin = require('html-bundler-webpack-plugin');
+const { type } = require('os');
+const loader = require('sass-loader');
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -72,6 +74,14 @@ module.exports = {
 			{
 				test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
 				type: 'asset/resource',
+			},
+			{
+				test: /\.svg$/,
+				type: 'asset',
+				loader: 'svgo-loader',
+				options: {
+					configFile: Path.resolve(__dirname, './svgo.config.js'),
+				},
 			},
 		],
 	},
