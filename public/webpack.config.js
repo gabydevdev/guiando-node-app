@@ -10,9 +10,9 @@ require('dotenv').config({
 module.exports = {
 	target: 'web',
 	mode: isDev ? 'development' : 'production',
-	devtool: 'eval-cheap-source-map',
+	devtool: 'source-map',
 	output: {
-		path: Path.resolve(__dirname, 'dist/')
+		path: Path.resolve(__dirname, 'dist/'),
 	},
 	resolve: {
 		alias: {
