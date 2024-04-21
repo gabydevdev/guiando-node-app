@@ -21,31 +21,14 @@ if (baseUrlPath) {
 // Middleware to parse JSON bodies in incoming requests
 app.use(express.json());
 
-const bookingsDir = path.join(__dirname, "booking_logs");
+const bookingData = path.join(__dirname, "booking_logs");
 
 app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
-	fs.readdir(bookingsDir, (err, files) => {
-		if (err) {
-			console.error("Could not list the directory.", err);
-			res.status(500).send("Internal server error");
-			return;
-		}
+	// Get query parameters for pagination and limit
+	const page = parseInt(req.query.page) || 1;
+	const limit = parseInt(req.query.limit) || 5; // Default is 5, can be overridden by query parameter
 
-		const bookings = [];
-		files.forEach((file) => {
-			const filePath = path.join(bookingsDir, file);
-			const bookingData = fs.readFileSync(filePath);
-			bookings.push(JSON.parse(bookingData));
-		});
-
-		res.json(bookings);
-	});
-});
-
-const testDir = path.join(__dirname, "booking_test_logs");
-
-app.get(`${baseUrlPath}/api/test`, (req, res) => {
-	fs.readdir(testDir, (err, files) => {
+	fs.readdir(bookingData, (err, files) => {
 		if (err) {
 			console.error("Could not list the directory.", err);
 			res.status(500).send("Internal server error");
@@ -54,20 +37,17 @@ app.get(`${baseUrlPath}/api/test`, (req, res) => {
 
 		// Sort files by last modified time, descending
 		files.sort((a, b) => {
-			return fs.statSync(path.join(testDir, b)).mtime.getTime() - fs.statSync(path.join(testDir, a)).mtime.getTime();
+			return fs.statSync(path.join(bookingData, b)).mtime.getTime() - fs.statSync(path.join(bookingData, a)).mtime.getTime();
 		});
 
-		// Get query parameter for pagination
-		const page = parseInt(req.query.page) || 1;
-		const limit = 5; // Number of files per page
 		const startIndex = (page - 1) * limit;
 		const endIndex = startIndex + limit;
 
-		const testLogs = [];
+		const bookings = [];
 		files.slice(startIndex, endIndex).forEach((file) => {
-			const filePath = path.join(testDir, file);
-			const testData = fs.readFileSync(filePath);
-			testLogs.push(JSON.parse(testData));
+			const filePath = path.join(bookingData, file);
+			const fileData = fs.readFileSync(filePath);
+			bookings.push(JSON.parse(fileData));
 		});
 
 		// Prepare response with pagination data
@@ -75,7 +55,49 @@ app.get(`${baseUrlPath}/api/test`, (req, res) => {
 			total: files.length,
 			nextPage: endIndex < files.length ? page + 1 : null,
 			prevPage: page > 1 ? page - 1 : null,
-			data: testLogs,
+			data: bookings,
+		};
+
+		res.json(result);
+	});
+});
+
+
+const testData = path.join(__dirname, "booking_data");
+
+app.get(`${baseUrlPath}/api/test`, (req, res) => {
+	// Get query parameters for pagination and limit
+	const page = parseInt(req.query.page) || 1;
+	const limit = parseInt(req.query.limit) || 5; // Default is 5, can be overridden by query parameter
+
+	fs.readdir(testData, (err, files) => {
+		if (err) {
+			console.error("Could not list the directory.", err);
+			res.status(500).send("Internal server error");
+			return;
+		}
+
+		// Sort files by last modified time, descending
+		files.sort((a, b) => {
+			return fs.statSync(path.join(testData, b)).mtime.getTime() - fs.statSync(path.join(testData, a)).mtime.getTime();
+		});
+
+		const startIndex = (page - 1) * limit;
+		const endIndex = startIndex + limit;
+
+		const bookings = [];
+		files.slice(startIndex, endIndex).forEach((file) => {
+			const filePath = path.join(testData, file);
+			const fileData = fs.readFileSync(filePath);
+			bookings.push(JSON.parse(fileData));
+		});
+
+		// Prepare response with pagination data
+		const result = {
+			total: files.length,
+			nextPage: endIndex < files.length ? page + 1 : null,
+			prevPage: page > 1 ? page - 1 : null,
+			data: bookings,
 		};
 
 		res.json(result);
@@ -88,8 +110,8 @@ app.get(`${baseUrlPath}/api/test`, (req, res) => {
  *
  * @return {Response} Sends a text response confirming the successful GET request.
  */
-app.get(`${baseUrlPath}/bookings`, (req, res) => {
-	res.status(200).send("GET request to the /bookings endpoint");
+app.get(`${baseUrlPath}/zapier`, (req, res) => {
+	res.status(200).send("GET request to the /zapier endpoint");
 });
 
 /**
@@ -100,7 +122,7 @@ app.get(`${baseUrlPath}/bookings`, (req, res) => {
  * @param {Object} req.body - The JSON payload of the request, expected to contain "bookingId".
  * @return {Response} Indicates whether the corresponding file was created or updated.
  */
-app.post(`${baseUrlPath}/bookings`, (req, res) => {
+app.post(`${baseUrlPath}/zapier`, (req, res) => {
 	const bookingId = req.body.bookingId; // Extracts the booking ID from the request body
 
 	// Defines the path to the directory where booking logs will be stored
@@ -122,51 +144,7 @@ app.post(`${baseUrlPath}/bookings`, (req, res) => {
 		}
 
 		// Responds to indicate the action taken on the file
-		res.status(200).send(`File for booking ID ${bookingId} ${fs.existsSync(filePath) ? "updated" : "created"} in the booking_logs folder.`);
-	});
-});
-
-/**
- * GET endpoint for testing server responsiveness.
- * This endpoint dynamically adjusts based on the BASE_URL_PATH environment variable.
- *
- * @return {Response} Sends a text response confirming the successful GET request.
- */
-app.get(`${baseUrlPath}/test`, (req, res) => {
-	res.status(200).send("GET request to the /test endpoint");
-});
-
-/**
- * POST endpoint to handle incoming JSON payloads with a "bookingId".
- * It saves or updates a JSON file named after the "bookingId" in the "booking_test_log" directory.
- * The endpoint's path is dynamically adjusted based on the BASE_URL_PATH environment variable.
- *
- * @param {Object} req.body - The JSON payload of the request, expected to contain "bookingId".
- * @return {Response} Indicates whether the corresponding file was created or updated.
- */
-app.post(`${baseUrlPath}/test`, (req, res) => {
-	const bookingId = req.body.bookingId; // Extracts the booking ID from the request body
-
-	// Defines the path to the directory where booking logs will be stored
-	const logsDir = path.join(__dirname, "booking_test_logs");
-
-	// Ensures the existence of the 'booking_logs' directory, creating it if necessary
-	if (!fs.existsSync(logsDir)) {
-		fs.mkdirSync(logsDir, { recursive: true });
-	}
-
-	// Constructs the full path for the new or existing file
-	const filePath = path.join(logsDir, `${bookingId}.json`);
-
-	// Writes the JSON payload to the file, creating or overwriting it as needed
-	fs.writeFile(filePath, JSON.stringify(req.body, null, 2), (err) => {
-		if (err) {
-			console.error("Error writing file:", err);
-			return res.status(500).send("Error processing request");
-		}
-
-		// Responds to indicate the action taken on the file
-		res.status(200).send(`File for booking ID ${bookingId} ${fs.existsSync(filePath) ? "updated" : "created"} in the booking_test_logs folder.`);
+		res.status(200).send(`File for booking ID ${bookingId} ${fs.existsSync(filePath) ? "updated" : "created"} in the booking_data folder.`);
 	});
 });
 
