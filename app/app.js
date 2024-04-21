@@ -57,11 +57,11 @@ app.get(`${baseUrlPath}/api/test`, (req, res) => {
 			return fs.statSync(path.join(testDir, b)).mtime.getTime() - fs.statSync(path.join(testDir, a)).mtime.getTime();
 		});
 
-		// Get query parameter for pagination
-		const page = parseInt(req.query.page) || 1;
-		const limit = 5; // Number of files per page
-		const startIndex = (page - 1) * limit;
-		const endIndex = startIndex + limit;
+		// Get query parameters for pagination and limit
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5; // Default is 5, can be overridden by query parameter
+        const startIndex = (page - 1) * limit;
+        const endIndex = startIndex + limit;
 
 		const testLogs = [];
 		files.slice(startIndex, endIndex).forEach((file) => {
