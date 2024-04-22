@@ -2,8 +2,10 @@
 import DataTable from 'datatables.net-dt';
 import { fetchDataFromAPI } from './apiManager';
 
+let tableInstance;
+
 export function setupDataTable(selector) {
-	var table = new DataTable(selector, {
+	tableInstance = new DataTable(selector, {
 		processing: true,
 		serverSide: true,
 		ajax: async function (data, callback) {
@@ -18,7 +20,7 @@ export function setupDataTable(selector) {
 					draw: data.draw,
 					recordsTotal: result.recordsTotal,
 					recordsFiltered: result.recordsFiltered,
-					data: result.data
+					data: result.data,
 				});
 				console.log(result);
 			} catch (error) {
@@ -42,8 +44,16 @@ export function setupDataTable(selector) {
 	});
 
 	console.log(
-		'There are' + table.data().length + ' row(s) of data in this table'
+		'There are' +
+			tableInstance.data().length +
+			' row(s) of data in this table'
 	);
 
-	console.log(table.state());
+	console.log(tableInstance.state());
+}
+
+export function redrawTable() {
+	if (tableInstance) {
+		tableInstance.draw();
+	}
 }

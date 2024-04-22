@@ -1,9 +1,12 @@
 import { Popover, Dropdown } from 'bootstrap';
-import { setupDataTable } from './dataTableSetup';
+// import { setupDataTable, redrawTable } from './dataTableSetup';
+import { createTableWithData } from './tables';
 
 document.addEventListener('DOMContentLoaded', async function () {
 	initializeBootstrapComponents();
-	setupDataTable('#bookingsTable');
+	// setupDataTable('#bookingsTable');
+	// redrawTable();
+	createTableWithData('#bookingsTable');
 });
 
 function initializeBootstrapComponents() {
