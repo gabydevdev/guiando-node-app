@@ -1,20 +1,7 @@
-import { fetchDataFromAPI } from './apiManager';
-
-export async function createTableWithData(selector) {
-	const table = document.getElementById(selector);
-	const tbody = table.getElementsByTagName('tbody');
-
-	console.log(table); // currently shows as null
-	console.log(tbody); // currently shows as null
-
-	const params = {
-		limit: 10,
-		page: 1,
-	};
-
-	const result = await fetchDataFromAPI(params); // It doesn't seem to be loading the data
-
-	console.log(result);
+// tables.js
+export async function createTableWithData(element, jsonData) {
+	const tbody = element.lastElementChild;
+	const result = jsonData;
 
 	result.forEach((item) => {
 		const row = document.createElement('tr');
@@ -24,6 +11,11 @@ export async function createTableWithData(selector) {
 			// Formatting the value if it's a date
 			if (key === 'createdOn' || key === 'travelDate') {
 				value = new Date(value).toLocaleDateString();
+			}
+
+			// Formatting the value if it's currency
+			if (key === 'totalPrice') {
+				value = new Intl.NumberFormat().format(value);
 			}
 			addCell(row, value);
 		});
