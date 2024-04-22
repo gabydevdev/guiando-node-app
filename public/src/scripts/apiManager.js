@@ -1,0 +1,46 @@
+// apiManager.js
+const apiUrl = 'http://localhost:3000/api/test';
+
+function cleanData(item) {
+	const cleanedActivityBookings = JSON.parse(
+		item.activityBookings
+			.replace(/'/g, '"')
+			.replace(/False/g, 'false')
+			.replace(/True/g, 'true')
+			.replace(/None/g, 'null')
+			.replace(
+				/(?<=[A-Za-z0-9])"(?=[A-Za-z0-9])/g,
+				'SINGLE_QUOTE_STANDBY'
+			)
+			.replace(/\\x/g, '')
+			.replace(/="/g, '=&quot;')
+			.replace(/;"/g, ';&quot;')
+			.replace(/">/g, '&quot;&gt;')
+			.replace(/SINGLE_QUOTE_STANDBY/g, "'")
+	);
+
+	console.log('cleanedActivityBookings: ', cleanedActivityBookings[0]);
+
+	return cleanedActivityBookings[0];
+}
+
+export async function fetchDataFromAPI() {
+	try {
+		const response = await fetch(apiUrl);
+		const result = await response.json();
+		return result.data.map((item) => {
+			const activityBookings = cleanData(item);
+			return [
+				item.status,
+				item.bookingId,
+				item.creationDate,
+				activityBookings.activity.externalId,
+				activityBookings.dateString,
+				activityBookings.totalParticipants,
+				item.totalPrice,
+			];
+		});
+	} catch (error) {
+		console.error('There was a problem with your fetch operation:', error);
+	}
+}
