@@ -101,8 +101,8 @@ const testData = path.join(__dirname, "booking_data");
 
 app.get(`${baseUrlPath}/api/test`, (req, res) => {
 	// Get query parameters for pagination and limit
+	const limit = parseInt(req.query.limit) || 5;
 	const page = parseInt(req.query.page) || 1;
-	const limit = parseInt(req.query.limit) || 5; // Default is 5, can be overridden by query parameter
 
 	fs.readdir(testData, (err, files) => {
 		if (err) {
@@ -116,7 +116,7 @@ app.get(`${baseUrlPath}/api/test`, (req, res) => {
 			return fs.statSync(path.join(testData, b)).mtime.getTime() - fs.statSync(path.join(testData, a)).mtime.getTime();
 		});
 
-		const startIndex = (page - 1) * limit;
+		const startIndex = page == 0 ? 0 : (page - 1) * limit;
 		const endIndex = startIndex + limit;
 
 		const bookings = [];
