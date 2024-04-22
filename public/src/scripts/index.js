@@ -29,30 +29,22 @@ function fetchDataFromAPI() {
 				const creationDate = item.creationDate;
 				const totalPrice = item.totalPrice;
 
-				let activityBookings = item.activityBookings;
-
-				const cleanedString = activityBookings
-					.replace(/'/g, '"')
-					.replace(/False/g, 'false')
-					.replace(/True/g, 'true')
-					.replace(/None/g, 'null');
-
-				const formattedString = cleanedString
-					.replace(
-						/(?<=[A-Za-z0-9])"(?=[A-Za-z0-9])/g,
-						'SINGLE_QUOTE_STANDBY'
-					)
-					.replace(/\\x/g, '')
-					.replace(/="/g, '=&quot;')
-					.replace(/;"/g, ';&quot;')
-					.replace(/">/g, '&quot;&gt;');
-
-				const reformattedString = formattedString.replace(
-					/SINGLE_QUOTE_STANDBY/g,
-					"'"
+				const activityBookings = JSON.parse(
+					item.activityBookings
+						.replace(/'/g, '"')
+						.replace(/False/g, 'false')
+						.replace(/True/g, 'true')
+						.replace(/None/g, 'null')
+						.replace(
+							/(?<=[A-Za-z0-9])"(?=[A-Za-z0-9])/g,
+							'SINGLE_QUOTE_STANDBY'
+						)
+						.replace(/\\x/g, '')
+						.replace(/="/g, '=&quot;')
+						.replace(/;"/g, ';&quot;')
+						.replace(/">/g, '&quot;&gt;')
+						.replace(/SINGLE_QUOTE_STANDBY/g, "'")
 				);
-
-				activityBookings = JSON.parse(reformattedString);
 
 				const dateString = activityBookings[0].dateString;
 				const totalParticipants = activityBookings[0].totalParticipants;
@@ -70,6 +62,16 @@ function fetchDataFromAPI() {
 				console.log('totalParticipants: ', totalParticipants);
 				console.log('externalId: ', externalId);
 				console.log('customerData: ', customerData);
+
+				return [
+					status,
+					bookingId,
+					creationDate,
+					externalId,
+					dateString,
+					totalParticipants,
+					totalPrice,
+				];
 			});
 		})
 		.catch((error) => {
