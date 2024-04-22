@@ -1,5 +1,3 @@
-console.log('>> main');
-
 import { Popover, Dropdown } from 'bootstrap'; // Import Bootstrap's JS
 
 // Create an example popover
