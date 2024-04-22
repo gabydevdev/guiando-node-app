@@ -17,14 +17,14 @@ function cleanData(item) {
 			.replace(/SINGLE_QUOTE_STANDBY/g, "'")
 	);
 
-	console.log('cleanedActivityBookings: ', cleanedActivityBookings[0]);
-
 	return cleanedActivityBookings[0];
 }
 
 export async function fetchDataFromAPI(params) {
 	const query = new URLSearchParams(params).toString();
 	const apiUrl = `http://localhost:3000/api/test?${query}`;
+
+	console.log(apiUrl);
 
 	try {
 		const response = await fetch(apiUrl);

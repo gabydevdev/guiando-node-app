@@ -11,8 +11,6 @@ export function setupDataTable(selector) {
 			const params = {
 				limit: data.length,
 				page: data.start / data.length + 1,
-				sortCol: data.columns[data.order[0].column].data,
-				sortDir: data.order[0].dir,
 			};
 			const result = await fetchDataFromAPI(params);
 			callback({
@@ -21,6 +19,7 @@ export function setupDataTable(selector) {
 				recordsFiltered: result.total,
 				data: result.data,
 			});
+			console.log('result: ', result);
 		},
 		columns: [
 			{ data: 'status', title: 'Status' },
@@ -32,7 +31,7 @@ export function setupDataTable(selector) {
 			{ data: 'totalPrice', title: 'Total Price' },
 		],
 		paging: true,
-		ordering: true,
+		ordering: false,
 		searching: false,
 	});
 }

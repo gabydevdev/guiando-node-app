@@ -4,11 +4,7 @@ import { setupDataTable } from './dataTableSetup';
 
 document.addEventListener('DOMContentLoaded', async function () {
 	initializeBootstrapComponents();
-
-	const dataSet = await fetchDataFromAPI();
-	console.log('dataSet: ', dataSet);
-
-	setupDataTable('#bookingsTable', dataSet);
+	setupDataTable('#bookingsTable');
 });
 
 function initializeBootstrapComponents() {
