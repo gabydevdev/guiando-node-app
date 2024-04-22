@@ -1,12 +1,9 @@
 import { Popover, Dropdown } from 'bootstrap';
-// import { setupDataTable, redrawTable } from './dataTableSetup';
-import { createTableWithData } from './tables';
+import { fetchDataFromAPI } from './apiManager';
 
 document.addEventListener('DOMContentLoaded', async function () {
 	initializeBootstrapComponents();
-	// setupDataTable('#bookingsTable');
-	// redrawTable();
-	createTableWithData('#bookingsTable');
+	await createTableWithData('#bookingsTable');
 });
 
 function initializeBootstrapComponents() {
@@ -21,4 +18,40 @@ function initializeBootstrapComponents() {
 		'[data-bs-toggle="dropdown"]'
 	);
 	dropdownElements.forEach((dropdown) => new Dropdown(dropdown));
+}
+
+async function createTableWithData(selector) {
+	const table = document.getElementById(selector);
+	console.log(table); // currently shows as null and stops
+
+	const tbody = table.getElementsByTagName('tbody');
+	console.log(tbody);
+
+	const params = {
+		limit: 10,
+		page: 1,
+	};
+
+	const result = await fetchDataFromAPI(params);
+
+	console.log(result);
+
+	result.forEach((item) => {
+		const row = document.createElement('tr');
+		tbody.appendChild(row);
+
+		Object.entries(item).forEach(([key, value]) => {
+			// Formatting the value if it's a date
+			if (key === 'createdOn' || key === 'travelDate') {
+				value = new Date(value).toLocaleDateString();
+			}
+			addCell(row, value);
+		});
+	});
+}
+
+function addCell(row, text) {
+	const cell = document.createElement('td');
+	cell.textContent = text;
+	row.appendChild(cell);
 }
