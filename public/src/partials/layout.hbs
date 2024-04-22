@@ -27,9 +27,6 @@
 			<div class="container-fluid flex-fill p-0">
 				{{! output content block defined in a parent template }}
 				{{#block 'content'}}{{/block}}
-
-				{{! if the block is not defined in a parent template, then output default content }}
-				{{#block 'custom_block'}}<p class="custom">default block content</p>{{/block}}
 			</div>
 
 			{{> footer }}
