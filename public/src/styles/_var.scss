@@ -1,17 +1,21 @@
 $base-url: "../../";
 
 // color palette
-$color-primary: #7252d3;
-$color-complete: #0072ec;
+$body-bg-dark: #11223c;
+$body-secondary-bg-dark: #1a335b;
+$body-tertiary-bg-dark: color.mix($body-secondary-bg-dark, $body-bg-dark, 50%);
+$border-color-dark: #224379;
+$color-primary: #0d6efd;
+$color-complete: #00f;
 $color-success: #19ad79;
 $color-warning: #ffd945;
 $color-danger: #d83c31;
-$color-info: #3b4752;
-$color-menu: #2b303b;
+$color-info: color.mix(#224379, $body-bg-dark, 50%);
+$color-menu: color.mix($body-bg-dark, #09111e, 50%);
 
 // neutral color shades
 $color-contrast-lowest: #fff;
-$color-contrast-higher: #212121;
+$color-contrast-higher: #09111e;
 
 // constant colors
 $color-white: #fff;
@@ -122,8 +126,6 @@ $menu-icon-size: 40px;
 $secondary-sidebar-width: 250px;
 
 // menu horizontal
-$navbar-width: 45px;
-$menu-padding: 25px;
 $header-lg-height: 75px;
 $header-md-height: 51px;
 $header-sm-height: 50px;
@@ -185,7 +187,7 @@ $z-index-portlet: $z-index-6;
 
 // ============ ACCESSIBILITY ================
 // element focus only when using tab
-$color-focus: #78c8fe;
+$color-focus: #3465b5;
 $focus-width: 2px;
 
 // Legibility - auto detect font color for background
