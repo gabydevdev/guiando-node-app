@@ -32,13 +32,13 @@ export async function fetchDataFromAPI(params) {
 		return result.data.map((item) => {
 			const activityBookings = cleanData(item);
 			return {
-				status: item.status,
-				bookingId: item.bookingId,
-				cretionDate: item.creationDate,
-				externalId: activityBookings.activity.externalId,
-				dateString: activityBookings.dateString,
-				totalParticipants: activityBookings.totalParticipants,
-				totalPrice: item.totalPrice,
+				"status": item.status,
+				"bookingId": item.bookingId,
+				"creationDate": item.creationDate,
+				"externalId": activityBookings.activity.externalId,
+				"dateString": activityBookings.dateString,
+				"totalParticipants": activityBookings.totalParticipants,
+				"totalPrice": item.totalPrice,
 			};
 		});
 	} catch (error) {
