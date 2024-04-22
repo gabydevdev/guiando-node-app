@@ -7,15 +7,7 @@
 	thead {
 		tr {
 			th {
-				padding-top: 14px;
-				padding-bottom: 14px;
-				border-bottom: 1px solid fade($color-contrast-low, 70%);
-				color: $color-contrast-high;
-				font-family: $secondary-font-family;
-				font-size: 10.5px;
 				font-weight: 500;
-				letter-spacing: 0.06em;
-				text-transform: uppercase;
 				vertical-align: middle;
 
 				&[class*="sorting_"]:not([class="sorting_disabled"]) {

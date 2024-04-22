@@ -1,4 +1,5 @@
-import { Popover, Dropdown } from 'bootstrap'; // Import Bootstrap's JS
+import { Popover, Dropdown } from 'bootstrap';
+import DataTable from 'datatables.net-dt';
 
 // Create an example popover
 document.querySelectorAll('[data-bs-toggle="popover"]').forEach((popover) => {
@@ -21,7 +22,7 @@ function fetchDataFromAPI() {
 	fetch(apiUrl)
 		.then((response) => response.json())
 		.then((result) => {
-			result.data.forEach((item) => {
+			const dataSet = result.data.map((item) => {
 				const bookingId = item.bookingId;
 				const status = item.status;
 				const creationDate = item.creationDate;
@@ -70,6 +71,21 @@ function fetchDataFromAPI() {
 					totalParticipants,
 					totalPrice,
 				];
+			});
+
+			console.log('dataSet: ', dataSet);
+
+			new DataTable('#bookingsTable', {
+				columns: [
+					{ title: 'Booking Id' },
+					{ title: 'Status' },
+					{ title: 'Created On' },
+					{ title: 'Total Price' },
+					{ title: 'Travel Date' },
+					{ title: 'PAX' },
+					{ title: 'SKU' },
+				],
+				data: dataSet,
 			});
 		})
 		.catch((error) => {
