@@ -26,7 +26,9 @@ function fetchDataFromAPI() {
 		.then((result) => {
 			result.data.forEach((item) => {
 				const bookingId = item.bookingId;
-				console.log('bookingId:', bookingId);
+				const status = item.status;
+				const creationDate = item.creationDate;
+				const totalPrice = item.totalPrice;
 
 				let activityBookings = item.activityBookings;
 
@@ -37,7 +39,10 @@ function fetchDataFromAPI() {
 					.replace(/None/g, 'null');
 
 				const formattedString = cleanedString
-					.replace(/(?<=[A-Za-z0-9])"(?=[A-Za-z0-9])/g, 'SINGLE_QUOTE_STANDBY')
+					.replace(
+						/(?<=[A-Za-z0-9])"(?=[A-Za-z0-9])/g,
+						'SINGLE_QUOTE_STANDBY'
+					)
 					.replace(/\\x/g, '')
 					.replace(/="/g, '=&quot;')
 					.replace(/;"/g, ';&quot;')
@@ -50,19 +55,13 @@ function fetchDataFromAPI() {
 
 				activityBookings = JSON.parse(reformattedString);
 
-				console.log(typeof activityBookings);
-				console.log('activityBookingsJSON:', activityBookings);
+				const dateString = activityBookings[0].dateString;
+				const totalParticipants = activityBookings[0].totalParticipants;
 
-				// activityBookings = activityBookings.map((param) => {
-				// 	const { bookingId, ...rest } = param;
-				// 	return rest;
-				// });
+				const activityData = activityBookings[0].activity;
+				const externalId = activityData.externalId;
 
-				// const activityBookingsFormatted = JSON.stringify(activityBookings);
-
-				// console.log('activityBookingsFormatted:', activityBookingsFormatted);
-
-
+				const customerData = item.customer;
 			});
 		})
 		.catch((error) => {
