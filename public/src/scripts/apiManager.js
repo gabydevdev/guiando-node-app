@@ -1,6 +1,4 @@
 // apiManager.js
-const apiUrl = 'http://localhost:3000/api/test';
-
 function cleanData(item) {
 	const cleanedActivityBookings = JSON.parse(
 		item.activityBookings
@@ -24,7 +22,10 @@ function cleanData(item) {
 	return cleanedActivityBookings[0];
 }
 
-export async function fetchDataFromAPI() {
+export async function fetchDataFromAPI(params) {
+	const query = new URLSearchParams(params).toString();
+	const apiUrl = `http://localhost:3000/api/test?${query}`;
+
 	try {
 		const response = await fetch(apiUrl);
 		const result = await response.json();
