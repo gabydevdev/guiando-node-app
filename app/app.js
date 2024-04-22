@@ -7,6 +7,10 @@ require("dotenv").config(); // Loads environment variables from a .env file into
 // Create an Express application instance
 const app = express();
 
+// This will enable CORS for all routes and origins
+const cors = require('cors');
+app.use(cors());
+
 // Retrieve the base URL path and port from environment variables or use defaults
 const baseUrlPath = process.env.BASE_URL_PATH || "";
 const port = process.env.PORT || 3000;
@@ -62,7 +66,37 @@ app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 	});
 });
 
+app.get(`${baseUrlPath}/api/single`, (req, res) => {
+	const bookingIdQuery = req.query.bookingId; // Retrieve the bookingId from query parameters
 
+	if (!bookingIdQuery) {
+		// Respond with an error or empty array if no bookingId is specified
+		return res.status(400).json({ message: "Booking ID required" });
+	}
+
+	fs.readdir(bookingData, (err, files) => {
+		if (err) {
+			console.error("Could not list the directory.", err);
+			res.status(500).send("Internal server error");
+			return;
+		}
+
+		let single = [];
+		files.forEach((file) => {
+			const filePath = path.join(bookingLogs, file);
+			const bookingData = JSON.parse(fs.readFileSync(filePath, "utf8"));
+
+			if (!bookingIdQuery || bookingData.bookingId === bookingIdQuery) {
+				single.push(bookingData);
+			}
+		});
+
+		// Optionally, sort and paginate results here if necessary
+		res.json(single);
+	});
+});
+
+// Test endpoint -------------------------------------------
 const testData = path.join(__dirname, "booking_data");
 
 app.get(`${baseUrlPath}/api/test`, (req, res) => {
@@ -103,6 +137,38 @@ app.get(`${baseUrlPath}/api/test`, (req, res) => {
 		res.json(result);
 	});
 });
+
+app.get(`${baseUrlPath}/api/test/single`, (req, res) => {
+	const bookingIdQuery = req.query.bookingId; // Retrieve the bookingId from query parameters
+
+	if (!bookingIdQuery) {
+		// Respond with an error or empty array if no bookingId is specified
+		return res.status(400).json({ message: "Booking ID required" });
+	}
+
+	fs.readdir(testData, (err, files) => {
+		if (err) {
+			console.error("Could not list the directory.", err);
+			res.status(500).send("Internal server error");
+			return;
+		}
+
+		let single = [];
+		files.forEach((file) => {
+			const filePath = path.join(testData, file);
+			const bookingData = JSON.parse(fs.readFileSync(filePath, "utf8"));
+
+			if (!bookingIdQuery || bookingData.bookingId === bookingIdQuery) {
+				single.push(bookingData);
+			}
+		});
+
+		// Optionally, sort and paginate results here if necessary
+		res.json(single);
+	});
+});
+
+// ---------------------------------------------------------
 
 /**
  * GET endpoint for testing server responsiveness.
