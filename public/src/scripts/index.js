@@ -62,6 +62,15 @@ function fetchDataFromAPI() {
 				const externalId = activityData.externalId;
 
 				const customerData = item.customer;
+
+				console.log('bookingId: ', bookingId);
+				console.log('status: ', status);
+				console.log('creationDate: ', creationDate);
+				console.log('totalPrice: ', totalPrice);
+				console.log('dateString: ', dateString);
+				console.log('totalParticipants: ', totalParticipants);
+				console.log('externalId: ', externalId);
+				console.log('customerData: ', customerData);
 			});
 		})
 		.catch((error) => {
