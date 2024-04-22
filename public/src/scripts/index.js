@@ -22,83 +22,48 @@ const apiUrl = 'http://localhost:3000/api/test';
 // Function to fetch data from the API
 function fetchDataFromAPI() {
 	fetch(apiUrl)
-		.then((response) => {
-			// Check if the response is successful
-			if (!response.ok) {
-				throw new Error(
-					'Network response was not ok ' + response.statusText
-				);
-			}
-
-			return response.json();
-		})
+		.then((response) => response.json())
 		.then((result) => {
-			console.log('Data retrieved from API:', result); // Log data to the console
+			result.data.forEach((item) => {
+				const bookingId = item.bookingId;
+				console.log('bookingId:', bookingId);
 
-			if (result.data && Array.isArray(result.data)) {
-				// Assuming 'data' is the key where your array of objects is stored
-				result.data.forEach((item) => {
-					console.log('Booking ID:', item.bookingId);
+				let activityBookings = item.activityBookings;
 
-					// Assume 'activityBookings' is the field with the stringified JSON
-					const activityBookings = item.activityBookings;
+				const cleanedString = activityBookings
+					.replace(/'/g, '"')
+					.replace(/False/g, 'false')
+					.replace(/True/g, 'true')
+					.replace(/None/g, 'null');
 
-					// Temporarily replace escaped double quotes with a unique placeholder
-					let formattedString = activityBookings.replace(
-						/\\"/g,
-						'TEMP_DOUBLE_QUOTE'
-					);
+				const formattedString = cleanedString
+					.replace(/(?<=[A-Za-z0-9])"(?=[A-Za-z0-9])/g, 'SINGLE_QUOTE_STANDBY')
+					.replace(/\\x/g, '')
+					.replace(/="/g, '=&quot;')
+					.replace(/;"/g, ';&quot;')
+					.replace(/">/g, '&quot;&gt;');
 
-					// Replace single quotes with double quotes
-					formattedString = formattedString
-						.replace(/'/g, '"')
-						.replace(/False/g, 'false')
-						.replace(/True/g, 'true')
-						.replace(/None/g, 'null');
-
-					// Revert the placeholder back to escaped double quotes
-					const reformattedString = formattedString.replace(
-						/TEMP_DOUBLE_QUOTE/g,
-						"\\'"
-					);
-
-					console.log(typeof reformattedString);
-					console.log('reformattedString:', reformattedString);
-
-					try {
-						// Parse the string as JSON
-						const activityBookingsString =
-							JSON.stringify(reformattedString);
-
-						console.log(typeof activityBookingsString);
-
-						// let activityBookingsJSON = JSON.parse(
-						// 	activityBookingsString
-						// );
-
-						// activityBookingsJSON = JSON.parse(activityBookingsJSON);
-
-						// console.log(typeof activityBookingsJSON[0]);
-
-						// console.log(
-						// 	'parentBookingId:',
-						// 	activityBookingsJSON[0].parentBookingId
-						// );
-
-						// const parentBookingId = activityBookingsJSON.map(
-						// 	(item) => item.parentBookingId
-						// );
-
-						// console.log('parentBookingId:', parentBookingId);
-					} catch (e) {
-						console.error('Error parsing activity bookings:', e);
-					}
-				});
-			} else {
-				console.log(
-					'No booking data found or data is not in expected format'
+				const reformattedString = formattedString.replace(
+					/SINGLE_QUOTE_STANDBY/g,
+					"'"
 				);
-			}
+
+				activityBookings = JSON.parse(reformattedString);
+
+				console.log(typeof activityBookings);
+				console.log('activityBookingsJSON:', activityBookings);
+
+				// activityBookings = activityBookings.map((param) => {
+				// 	const { bookingId, ...rest } = param;
+				// 	return rest;
+				// });
+
+				// const activityBookingsFormatted = JSON.stringify(activityBookings);
+
+				// console.log('activityBookingsFormatted:', activityBookingsFormatted);
+
+
+			});
 		})
 		.catch((error) => {
 			console.error(
