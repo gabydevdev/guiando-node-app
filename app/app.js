@@ -1,72 +1,60 @@
-const express = require("express");
-const fs = require("fs");
-const path = require("path");
+// Import the necessary Node.js modules
+const express = require("express"); // Handles HTTP requests
+const fs = require("fs"); // Performs file system operations
+const path = require("path"); // Manages file and directory paths
+require("dotenv").config(); // Loads environment variables from a .env file into process.env
 
-require("dotenv").config();
-
+// Create an Express application instance
 const app = express();
 
+// This will enable CORS for all routes and origins
+const cors = require('cors');
+app.use(cors());
+
+// Retrieve the base URL path and port from environment variables or use defaults
 const baseUrlPath = process.env.BASE_URL_PATH || "";
 const port = process.env.PORT || 3000;
 
+// Serve static files from the 'public' directory
 if (baseUrlPath) {
 	app.use(baseUrlPath, express.static(path.join(__dirname, "public")));
 } else {
 	app.use("/", express.static(path.join(__dirname, "public")));
 }
 
+// Middleware to parse JSON bodies in incoming requests
 app.use(express.json());
 
-// Set the base directory for booking data
-const bookingLogs = path.join(__dirname, "booking_data");
+const bookingData = path.join(__dirname, "booking_logs");
 
-/**
- * GET /api/bookings - Fetch multiple bookings with pagination.
- * URL Parameters: None
- * Query Parameters:
- *   - page (optional): The page number of the bookings to retrieve (default is 1).
- *   - limit (optional): The number of bookings to retrieve per page (default is 5).
- * Request Body: None
- * Response:
- *   - 200 OK: Returns an object containing an array of bookings, total count, and pagination details.
- *   - 500 Internal Server Error: Server error or directory cannot be accessed.
- * Errors:
- *   - If the server encounters a problem reading the directory, returns a 500 error.
- */
 app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
-	// Parse query parameters for pagination
+	// Get query parameters for pagination and limit
 	const page = parseInt(req.query.page) || 1;
-	const limit = parseInt(req.query.limit) || 5;
+	const limit = parseInt(req.query.limit) || 5; // Default is 5, can be overridden by query parameter
 
-	// Read directory contents
-	fs.readdir(bookingLogs, (err, files) => {
+	fs.readdir(bookingData, (err, files) => {
 		if (err) {
-			// Log error and send 500 response if directory cannot be accessed
 			console.error("Could not list the directory.", err);
 			res.status(500).send("Internal server error");
 			return;
 		}
 
-		// Sort files by modification time to ensure the latest are considered first
+		// Sort files by last modified time, descending
 		files.sort((a, b) => {
-			return fs.statSync(path.join(bookingLogs, b)).mtime.getTime() - fs.statSync(path.join(bookingLogs, a)).mtime.getTime();
+			return fs.statSync(path.join(bookingData, b)).mtime.getTime() - fs.statSync(path.join(bookingData, a)).mtime.getTime();
 		});
 
-		// Calculate pagination boundaries
 		const startIndex = (page - 1) * limit;
-		const endIndex = Math.min(startIndex + limit, files.length);
+		const endIndex = startIndex + limit;
 
-		// Initialize array to hold booking data
 		const bookings = [];
+		files.slice(startIndex, endIndex).forEach((file) => {
+			const filePath = path.join(bookingData, file);
+			const fileData = fs.readFileSync(filePath);
+			bookings.push(JSON.parse(fileData));
+		});
 
-		// Loop through files within the current pagination slice
-		for (let i = startIndex; i < endIndex; i++) {
-			const filePath = path.join(bookingLogs, files[i]);
-			const fileContents = fs.readFileSync(filePath, "utf8");
-			bookings.push(JSON.parse(fileContents));
-		}
-
-		// Construct response object with pagination info and data
+		// Prepare response with pagination data
 		const result = {
 			total: files.length,
 			nextPage: endIndex < files.length ? page + 1 : null,
@@ -74,36 +62,19 @@ app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 			data: bookings,
 		};
 
-		// Send response with booking data
 		res.json(result);
 	});
 });
 
-/**
- * GET /api/single - Fetch a single booking by booking ID.
- * URL Parameters: None
- * Query Parameters:
- *   - bookingId (required): The unique identifier of the booking to retrieve.
- * Request Body: None
- * Response:
- *   - 200 OK: Returns a JSON object containing the booking details.
- *   - 400 Bad Request: Booking ID not provided in the query.
- *   - 500 Internal Server Error: Server error or directory cannot be accessed.
- * Errors:
- *   - If no bookingId is provided, returns a 400 error with a message prompting for the booking ID.
- *   - If the server encounters a problem reading the directory, returns a 500 error.
- */
 app.get(`${baseUrlPath}/api/single`, (req, res) => {
-	// Retrieve the bookingId from query parameters
-	const bookingIdQuery = req.query.bookingId;
+	const bookingIdQuery = req.query.bookingId; // Retrieve the bookingId from query parameters
 
-	// Return an error response if bookingId is not provided
 	if (!bookingIdQuery) {
+		// Respond with an error or empty array if no bookingId is specified
 		return res.status(400).json({ message: "Booking ID required" });
 	}
 
-	// Read the booking_data directory
-	fs.readdir(bookingLogs, (err, files) => {
+	fs.readdir(bookingData, (err, files) => {
 		if (err) {
 			console.error("Could not list the directory.", err);
 			res.status(500).send("Internal server error");
@@ -111,71 +82,137 @@ app.get(`${baseUrlPath}/api/single`, (req, res) => {
 		}
 
 		let single = [];
-
-		// Iterate through each file in the directory
 		files.forEach((file) => {
 			const filePath = path.join(bookingLogs, file);
 			const bookingData = JSON.parse(fs.readFileSync(filePath, "utf8"));
 
-			// Add the booking to the response if it matches the bookingIdQuery
-			if (bookingData.bookingId === bookingIdQuery) {
+			if (!bookingIdQuery || bookingData.bookingId === bookingIdQuery) {
 				single.push(bookingData);
 			}
 		});
 
-		// Send the matched booking data or an empty array if no match is found
+		// Optionally, sort and paginate results here if necessary
 		res.json(single);
 	});
 });
 
-/**
- * POST /bookings - Save or update a booking based on the provided booking ID.
- * URL Parameters: None
- * Query Parameters: None
- * Request Body:
- *   - bookingId (required): The ID of the booking to create or update.
- *   - Other relevant booking details that will be included in the JSON payload.
- * Response:
- *   - 200 OK: Indicates whether the booking file was created or updated.
- *   - 500 Internal Server Error: Error in writing the file or server error.
- * Errors:
- *   - If there is an error writing the file, a 500 error is returned with a message detailing the issue.
- */
-app.post(`${baseUrlPath}/bookings`, (req, res) => {
-	const bookingId = req.body.bookingId;
+// Test endpoint -------------------------------------------
+const testData = path.join(__dirname, "booking_data");
 
-	// Check for bookingId in the request body
-	if (!bookingId) {
-		return res.status(400).send("Booking ID is required");
+app.get(`${baseUrlPath}/api/test`, (req, res) => {
+	// Get query parameters for pagination and limit
+	const page = parseInt(req.query.page) || 1;
+	const limit = parseInt(req.query.limit) || 5; // Default is 5, can be overridden by query parameter
+
+	fs.readdir(testData, (err, files) => {
+		if (err) {
+			console.error("Could not list the directory.", err);
+			res.status(500).send("Internal server error");
+			return;
+		}
+
+		// Sort files by last modified time, descending
+		files.sort((a, b) => {
+			return fs.statSync(path.join(testData, b)).mtime.getTime() - fs.statSync(path.join(testData, a)).mtime.getTime();
+		});
+
+		const startIndex = (page - 1) * limit;
+		const endIndex = startIndex + limit;
+
+		const bookings = [];
+		files.slice(startIndex, endIndex).forEach((file) => {
+			const filePath = path.join(testData, file);
+			const fileData = fs.readFileSync(filePath);
+			bookings.push(JSON.parse(fileData));
+		});
+
+		// Prepare response with pagination data
+		const result = {
+			total: files.length,
+			nextPage: endIndex < files.length ? page + 1 : null,
+			prevPage: page > 1 ? page - 1 : null,
+			data: bookings,
+		};
+
+		res.json(result);
+	});
+});
+
+app.get(`${baseUrlPath}/api/test/single`, (req, res) => {
+	const bookingIdQuery = req.query.bookingId; // Retrieve the bookingId from query parameters
+
+	if (!bookingIdQuery) {
+		// Respond with an error or empty array if no bookingId is specified
+		return res.status(400).json({ message: "Booking ID required" });
 	}
 
-	const filePath = path.join(bookingLogs, `${bookingId}.json`);
+	fs.readdir(testData, (err, files) => {
+		if (err) {
+			console.error("Could not list the directory.", err);
+			res.status(500).send("Internal server error");
+			return;
+		}
 
-	// Write the booking data to the specified file, creating or updating it
+		let single = [];
+		files.forEach((file) => {
+			const filePath = path.join(testData, file);
+			const bookingData = JSON.parse(fs.readFileSync(filePath, "utf8"));
+
+			if (!bookingIdQuery || bookingData.bookingId === bookingIdQuery) {
+				single.push(bookingData);
+			}
+		});
+
+		// Optionally, sort and paginate results here if necessary
+		res.json(single);
+	});
+});
+
+// ---------------------------------------------------------
+
+/**
+ * GET endpoint for testing server responsiveness.
+ * This endpoint dynamically adjusts based on the BASE_URL_PATH environment variable.
+ *
+ * @return {Response} Sends a text response confirming the successful GET request.
+ */
+app.get(`${baseUrlPath}/zapier`, (req, res) => {
+	res.status(200).send("GET request to the /zapier endpoint");
+});
+
+/**
+ * POST endpoint to handle incoming JSON payloads with a "bookingId".
+ * It saves or updates a JSON file named after the "bookingId" in the "booking_logs" directory.
+ * The endpoint's path is dynamically adjusted based on the BASE_URL_PATH environment variable.
+ *
+ * @param {Object} req.body - The JSON payload of the request, expected to contain "bookingId".
+ * @return {Response} Indicates whether the corresponding file was created or updated.
+ */
+app.post(`${baseUrlPath}/zapier`, (req, res) => {
+	const bookingId = req.body.bookingId; // Extracts the booking ID from the request body
+
+	// Defines the path to the directory where booking logs will be stored
+	const logsDir = path.join(__dirname, "booking_logs");
+
+	// Ensures the existence of the 'booking_logs' directory, creating it if necessary
+	if (!fs.existsSync(logsDir)) {
+		fs.mkdirSync(logsDir, { recursive: true });
+	}
+
+	// Constructs the full path for the new or existing file
+	const filePath = path.join(logsDir, `${bookingId}.json`);
+
+	// Writes the JSON payload to the file, creating or overwriting it as needed
 	fs.writeFile(filePath, JSON.stringify(req.body, null, 2), (err) => {
 		if (err) {
 			console.error("Error writing file:", err);
 			return res.status(500).send("Error processing request");
 		}
 
-		// Respond indicating the action taken on the file
-		res.status(200).send(`File for booking ID ${bookingId} ${fs.existsSync(filePath) ? "updated" : "created"} in the booking_logs folder.`);
+		// Responds to indicate the action taken on the file
+		res.status(200).send(`File for booking ID ${bookingId} ${fs.existsSync(filePath) ? "updated" : "created"} in the booking_data folder.`);
 	});
 });
 
-/**
- * GET /bookings - Endpoint for testing server responsiveness.
- * URL Parameters: None
- * Query Parameters: None
- * Request Body: None
- * Response:
- *   - 200 OK: Sends a simple text response confirming the successful GET request.
- * Errors:
- *   - This endpoint is primarily for testing and generally should not error out under normal circumstances.
- */
-app.get(`${baseUrlPath}/bookings`, (req, res) => {
-	res.status(200).send("GET request to the /bookings endpoint");
-});
-
-// Start server
+// Starts the server on the configured port and logs a startup message
 app.listen(port, () => console.log(`Application is running on port ${port}`));
