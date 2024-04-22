@@ -4,7 +4,7 @@ import DataTable from 'datatables.net-dt';
 import { fetchDataFromAPI } from './apiManager';
 
 export function setupDataTable(selector) {
-	let table = new DataTable(selector, {
+	var table = new DataTable(selector, {
 		processing: true,
 		serverSide: true,
 		ajax: function (data, callback) {
