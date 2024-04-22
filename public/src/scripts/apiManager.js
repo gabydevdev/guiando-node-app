@@ -31,15 +31,15 @@ export async function fetchDataFromAPI(params) {
 		const result = await response.json();
 		return result.data.map((item) => {
 			const activityBookings = cleanData(item);
-			return [
-				item.status,
-				item.bookingId,
-				item.creationDate,
-				activityBookings.activity.externalId,
-				activityBookings.dateString,
-				activityBookings.totalParticipants,
-				item.totalPrice,
-			];
+			return {
+				status: item.status,
+				bookingId: item.bookingId,
+				cretionDate: item.creationDate,
+				externalId: activityBookings.activity.externalId,
+				dateString: activityBookings.dateString,
+				totalParticipants: activityBookings.totalParticipants,
+				totalPrice: item.totalPrice,
+			};
 		});
 	} catch (error) {
 		console.error('There was a problem with your fetch operation:', error);

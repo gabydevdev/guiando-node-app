@@ -8,7 +8,7 @@ require("dotenv").config(); // Loads environment variables from a .env file into
 const app = express();
 
 // This will enable CORS for all routes and origins
-const cors = require('cors');
+const cors = require("cors");
 app.use(cors());
 
 // Retrieve the base URL path and port from environment variables or use defaults
@@ -100,9 +100,8 @@ app.get(`${baseUrlPath}/api/single`, (req, res) => {
 const testData = path.join(__dirname, "booking_data");
 
 app.get(`${baseUrlPath}/api/test`, (req, res) => {
-	// Get query parameters for pagination and limit
-	const limit = parseInt(req.query.limit) || 5;
-	const page = parseInt(req.query.page) || 1;
+	const start = parseInt(req.query.start) || 0;
+	const length = parseInt(req.query.length) || 10;
 
 	fs.readdir(testData, (err, files) => {
 		if (err) {
@@ -111,30 +110,24 @@ app.get(`${baseUrlPath}/api/test`, (req, res) => {
 			return;
 		}
 
-		// Sort files by last modified time, descending
 		files.sort((a, b) => {
 			return fs.statSync(path.join(testData, b)).mtime.getTime() - fs.statSync(path.join(testData, a)).mtime.getTime();
 		});
 
-		const startIndex = page == 0 ? 0 : (page - 1) * limit;
-		const endIndex = startIndex + limit;
+		const endIndex = start + length;
 
-		const bookings = [];
-		files.slice(startIndex, endIndex).forEach((file) => {
+		const bookings = files.slice(start, endIndex).map((file) => {
 			const filePath = path.join(testData, file);
 			const fileData = fs.readFileSync(filePath);
-			bookings.push(JSON.parse(fileData));
+			return JSON.parse(fileData);
 		});
 
-		// Prepare response with pagination data
-		const result = {
-			total: files.length,
-			nextPage: endIndex < files.length ? page + 1 : null,
-			prevPage: page > 1 ? page - 1 : null,
+		res.json({
+			draw: parseInt(req.query.draw),
+			recordsTotal: files.length,
+			recordsFiltered: files.length,
 			data: bookings,
-		};
-
-		res.json(result);
+		});
 	});
 });
 

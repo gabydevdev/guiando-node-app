@@ -1,24 +1,20 @@
 // dataTableSetup.js
 import $ from 'jquery';
-import DataTable from 'datatables.net-dt';
+import 'datatables.net-dt';
 import { fetchDataFromAPI } from './apiManager';
 
 export function setupDataTable(selector) {
 	$(selector).DataTable({
 		processing: true,
 		serverSide: true,
-		ajax: async function (data, callback, settings) {
+		ajax: async function (data, callback) {
 			const params = {
-				limit: data.length,
-				page: data.start / data.length + 1,
+				start: data.start,
+				length: data.length,
+				draw: data.draw,
 			};
 			const result = await fetchDataFromAPI(params);
-			callback({
-				draw: data.draw,
-				recordsTotal: result.total,
-				recordsFiltered: result.total,
-				data: result.data,
-			});
+			callback(result);
 			console.log('result: ', result);
 		},
 		columns: [

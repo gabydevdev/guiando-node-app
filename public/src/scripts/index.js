@@ -1,5 +1,4 @@
 import { Popover, Dropdown } from 'bootstrap';
-import { fetchDataFromAPI } from './apiManager';
 import { setupDataTable } from './dataTableSetup';
 
 document.addEventListener('DOMContentLoaded', async function () {
