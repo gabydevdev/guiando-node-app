@@ -1,7 +1,8 @@
 console.log('>> main');
 
-// Import all of Bootstrap's JS
-import { Popover, Dropdown } from 'bootstrap';
+import { Popover, Dropdown } from 'bootstrap'; // Import Bootstrap's JS
+import { Grid } from 'gridjs'; // Import Gridjs library
+
 
 // Create an example popover
 document.querySelectorAll('[data-bs-toggle="popover"]').forEach((popover) => {
@@ -14,6 +15,16 @@ document
 	.forEach((dropdownToggleEl) => {
 		new Dropdown(dropdownToggleEl);
 	});
+
+// Table
+const grid = new Grid({
+	columns: ['Name', 'Email'],
+	data: [
+		['John', 'john@example.com'],
+		['Mike', 'mike@gmail.com'],
+	],
+});
+grid.render(document.getElementById('table'));
 
 // Test scripts
 // Define the API endpoint
