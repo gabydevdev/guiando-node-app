@@ -101,8 +101,11 @@ const testData = path.join(__dirname, "booking_data");
 
 app.get(`${baseUrlPath}/api/test`, (req, res) => {
 	// Get query parameters for pagination and limit
-	const limit = parseInt(req.query.limit) || 5;
-	const page = parseInt(req.query.page) || 1;
+	// const limit = parseInt(req.query.limit) || 5;
+	// const page = parseInt(req.query.page) || 1;
+
+	const start = parseInt(req.query.start) || 0;
+	const length = parseInt(req.query.length) || 10;
 
 	fs.readdir(testData, (err, files) => {
 		if (err) {
@@ -116,21 +119,48 @@ app.get(`${baseUrlPath}/api/test`, (req, res) => {
 			return fs.statSync(path.join(testData, b)).mtime.getTime() - fs.statSync(path.join(testData, a)).mtime.getTime();
 		});
 
-		const startIndex = page == 0 ? 0 : (page - 1) * limit;
-		const endIndex = startIndex + limit;
+		// const startIndex = page == 0 ? 0 : (page - 1) * limit;
+		// const endIndex = startIndex + limit;
+
+		const endIndex = start + length;
 
 		const bookings = [];
-		files.slice(startIndex, endIndex).forEach((file) => {
+		files.slice(start, endIndex).forEach((file) => {
 			const filePath = path.join(testData, file);
-			const fileData = fs.readFileSync(filePath);
-			bookings.push(JSON.parse(fileData));
+
+			let fileData = fs.readFileSync(filePath);
+			fileData = JSON.parse(fileData);
+
+			let activityBookings = fileData.activityBookings;
+			let creationDate = fileData.creationDate;
+			let productInvoices = fileData.invoice.productInvoices;
+
+			delete fileData.activityBookings;
+			delete fileData.creationDate;
+			delete fileData.invoice.productInvoices;
+
+			activityBookings = cleanData(activityBookings);
+			creationDate = new Date(parseInt(creationDate));
+			productInvoices = cleanData(productInvoices);
+
+			fileData.activityBookings = activityBookings;
+			fileData.creationDate = creationDate;
+			fileData.invoice.productInvoices = productInvoices;
+
+			bookings.push(fileData);
 		});
 
-		// Prepare response with pagination data
+		// const result = {
+		// 	total: files.length,
+		// 	nextPage: endIndex < files.length ? page + 1 : null,
+		// 	prevPage: page > 1 ? page - 1 : null,
+		// 	data: bookings,
+		// };
+
 		const result = {
-			total: files.length,
-			nextPage: endIndex < files.length ? page + 1 : null,
-			prevPage: page > 1 ? page - 1 : null,
+			draw: parseInt(req.query.draw),
+			recordsTotal: files.length,
+			recordsFiltered: files.length,
 			data: bookings,
 		};
 
@@ -213,6 +243,26 @@ app.post(`${baseUrlPath}/zapier`, (req, res) => {
 		res.status(200).send(`File for booking ID ${bookingId} ${fs.existsSync(filePath) ? "updated" : "created"} in the booking_data folder.`);
 	});
 });
+
+
+function cleanData(string) {
+	const formattedData = JSON.parse(
+		string
+			.replace(/'/g, '"')
+			.replace(/False/g, "false")
+			.replace(/True/g, "true")
+			.replace(/None/g, "null")
+			.replace(/(?<=[A-Za-z0-9])"(?=[A-Za-z0-9])/g, "SINGLE_QUOTE_STANDBY")
+			.replace(/\\x/g, "")
+			.replace(/="/g, "=&quot;")
+			.replace(/;"/g, ";&quot;")
+			.replace(/">/g, "&quot;&gt;")
+			.replace(/SINGLE_QUOTE_STANDBY/g, "'")
+	);
+
+	return formattedData;
+}
+
 
 // Starts the server on the configured port and logs a startup message
 app.listen(port, () => console.log(`Application is running on port ${port}`));

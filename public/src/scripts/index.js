@@ -1,13 +1,7 @@
 import { Popover, Dropdown } from 'bootstrap';
-import { fetchDataFromAPI } from './apiManager';
-import { createTableWithData } from './tables';
+import { setupDataTable } from './dataTables';
 
 let apiURL = "http://localhost:3000/api/test";
-
-let params = {
-	limit: 10,
-	page: 1,
-};
 
 if (document.readyState === 'loading') {
 	// Loading hasn't finished yet
@@ -20,9 +14,8 @@ if (document.readyState === 'loading') {
 async function doSomething() {
 	initializeBootstrapComponents();
 
-	const tableEl = document.getElementById('bookingsTable')
-	let jsonData = await fetchDataFromAPI(params, apiURL);
-	createTableWithData(tableEl, jsonData);
+	const tableEl = document.getElementById('bookingsTable');
+	setupDataTable(tableEl, apiURL);
 }
 
 function initializeBootstrapComponents() {

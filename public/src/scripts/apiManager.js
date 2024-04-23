@@ -13,19 +13,12 @@ export async function fetchDataFromAPI(params, apiURL) {
 				const status = item.status;
 				const creationDate = item.creationDate;
 				const totalPrice = item.totalPrice;
-
-				const activityBookings = cleanData(item);
-
-				const dateString = activityBookings.dateString;
-				const totalParticipants = activityBookings.totalParticipants;
-
-				const activity = activityBookings.activity;
+				const dateString = item.activityBookings[0].dateString;
+				const totalParticipants = item.activityBookings[0].totalParticipants;
+				const activity = item.activityBookings[0].activity;
 				const externalId = activity.externalId;
 
 				// const customerData = item.customer;
-
-				// console.log('bookingId: ', bookingId);
-				// console.log('externalId: ', externalId);
 
 				const dataArray = {
 					status: status,
@@ -37,12 +30,10 @@ export async function fetchDataFromAPI(params, apiURL) {
 					totalPrice: totalPrice,
 				};
 
-				// console.log('dataArray: ', dataArray);
+				console.log('dataArray: ', dataArray);
 
 				return dataArray;
 			});
-
-			// console.log('dataSet: ', dataSet);
 
 			return dataSet;
 		})
