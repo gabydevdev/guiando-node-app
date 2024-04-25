@@ -25,89 +25,14 @@ if (baseUrlPath) {
 // Middleware to parse JSON bodies in incoming requests
 app.use(express.json());
 
-const bookingData = path.join(__dirname, "booking_logs");
+const bookingsDataLogs = path.join(__dirname, "booking_data");
 
 app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
-	// Get query parameters for pagination and limit
-	const page = parseInt(req.query.page) || 1;
-	const limit = parseInt(req.query.limit) || 5; // Default is 5, can be overridden by query parameter
-
-	fs.readdir(bookingData, (err, files) => {
-		if (err) {
-			console.error("Could not list the directory.", err);
-			res.status(500).send("Internal server error");
-			return;
-		}
-
-		// Sort files by last modified time, descending
-		files.sort((a, b) => {
-			return fs.statSync(path.join(bookingData, b)).mtime.getTime() - fs.statSync(path.join(bookingData, a)).mtime.getTime();
-		});
-
-		const startIndex = (page - 1) * limit;
-		const endIndex = startIndex + limit;
-
-		const bookings = [];
-		files.slice(startIndex, endIndex).forEach((file) => {
-			const filePath = path.join(bookingData, file);
-			const fileData = fs.readFileSync(filePath);
-			bookings.push(JSON.parse(fileData));
-		});
-
-		// Prepare response with pagination data
-		const result = {
-			total: files.length,
-			nextPage: endIndex < files.length ? page + 1 : null,
-			prevPage: page > 1 ? page - 1 : null,
-			data: bookings,
-		};
-
-		res.json(result);
-	});
-});
-
-app.get(`${baseUrlPath}/api/single`, (req, res) => {
-	const bookingIdQuery = req.query.bookingId; // Retrieve the bookingId from query parameters
-
-	if (!bookingIdQuery) {
-		// Respond with an error or empty array if no bookingId is specified
-		return res.status(400).json({ message: "Booking ID required" });
-	}
-
-	fs.readdir(bookingData, (err, files) => {
-		if (err) {
-			console.error("Could not list the directory.", err);
-			res.status(500).send("Internal server error");
-			return;
-		}
-
-		let single = [];
-		files.forEach((file) => {
-			const filePath = path.join(bookingLogs, file);
-			const bookingData = JSON.parse(fs.readFileSync(filePath, "utf8"));
-
-			if (!bookingIdQuery || bookingData.bookingId === bookingIdQuery) {
-				single.push(bookingData);
-			}
-		});
-
-		// Optionally, sort and paginate results here if necessary
-		res.json(single);
-	});
-});
-
-// Test endpoint -------------------------------------------
-const testData = path.join(__dirname, "booking_data");
-
-app.get(`${baseUrlPath}/api/test`, (req, res) => {
-	// Get query parameters for pagination and limit
-	// const limit = parseInt(req.query.limit) || 5;
-	// const page = parseInt(req.query.page) || 1;
-
+	// Get query parameters
 	const start = parseInt(req.query.start) || 0;
 	const length = parseInt(req.query.length) || 10;
 
-	fs.readdir(testData, (err, files) => {
+	fs.readdir(bookingsDataLogs, (err, files) => {
 		if (err) {
 			console.error("Could not list the directory.", err);
 			res.status(500).send("Internal server error");
@@ -116,17 +41,14 @@ app.get(`${baseUrlPath}/api/test`, (req, res) => {
 
 		// Sort files by last modified time, descending
 		files.sort((a, b) => {
-			return fs.statSync(path.join(testData, b)).mtime.getTime() - fs.statSync(path.join(testData, a)).mtime.getTime();
+			return fs.statSync(path.join(bookingsDataLogs, b)).mtime.getTime() - fs.statSync(path.join(bookingsDataLogs, a)).mtime.getTime();
 		});
-
-		// const startIndex = page == 0 ? 0 : (page - 1) * limit;
-		// const endIndex = startIndex + limit;
 
 		const endIndex = start + length;
 
 		const bookings = [];
 		files.slice(start, endIndex).forEach((file) => {
-			const filePath = path.join(testData, file);
+			const filePath = path.join(bookingsDataLogs, file);
 
 			let fileData = fs.readFileSync(filePath);
 			fileData = JSON.parse(fileData);
@@ -150,13 +72,6 @@ app.get(`${baseUrlPath}/api/test`, (req, res) => {
 			bookings.push(fileData);
 		});
 
-		// const result = {
-		// 	total: files.length,
-		// 	nextPage: endIndex < files.length ? page + 1 : null,
-		// 	prevPage: page > 1 ? page - 1 : null,
-		// 	data: bookings,
-		// };
-
 		const result = {
 			draw: parseInt(req.query.draw),
 			recordsTotal: files.length,
@@ -168,7 +83,7 @@ app.get(`${baseUrlPath}/api/test`, (req, res) => {
 	});
 });
 
-app.get(`${baseUrlPath}/api/test/single`, (req, res) => {
+app.get(`${baseUrlPath}/api/bookings/single`, (req, res) => {
 	const bookingIdQuery = req.query.bookingId; // Retrieve the bookingId from query parameters
 
 	if (!bookingIdQuery) {
@@ -176,7 +91,7 @@ app.get(`${baseUrlPath}/api/test/single`, (req, res) => {
 		return res.status(400).json({ message: "Booking ID required" });
 	}
 
-	fs.readdir(testData, (err, files) => {
+	fs.readdir(bookingsDataLogs, (err, files) => {
 		if (err) {
 			console.error("Could not list the directory.", err);
 			res.status(500).send("Internal server error");
@@ -185,7 +100,7 @@ app.get(`${baseUrlPath}/api/test/single`, (req, res) => {
 
 		let single = [];
 		files.forEach((file) => {
-			const filePath = path.join(testData, file);
+			const filePath = path.join(bookingsDataLogs, file);
 			const bookingData = JSON.parse(fs.readFileSync(filePath, "utf8"));
 
 			if (!bookingIdQuery || bookingData.bookingId === bookingIdQuery) {

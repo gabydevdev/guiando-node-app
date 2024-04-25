@@ -1,7 +1,8 @@
+// index.js
 import { Popover, Dropdown } from 'bootstrap';
 import { setupDataTable } from './dataTables';
 
-let apiURL = "http://localhost:3000/api/test";
+let apiURL = process.env.API_URL + '/api/bookings';
 
 if (document.readyState === 'loading') {
 	// Loading hasn't finished yet

@@ -1,5 +1,5 @@
 // apiManager.js
-export async function fetchDataFromAPI(params, apiURL) {
+export async function fetchDataFromAPI(apiURL, params) {
 	const query = new URLSearchParams(params).toString();
 
 	apiURL = `${apiURL}?${query}`;
@@ -14,11 +14,10 @@ export async function fetchDataFromAPI(params, apiURL) {
 				const creationDate = item.creationDate;
 				const totalPrice = item.totalPrice;
 				const dateString = item.activityBookings[0].dateString;
-				const totalParticipants = item.activityBookings[0].totalParticipants;
+				const totalParticipants =
+					item.activityBookings[0].totalParticipants;
 				const activity = item.activityBookings[0].activity;
 				const externalId = activity.externalId;
-
-				// const customerData = item.customer;
 
 				const dataArray = {
 					status: status,
@@ -35,6 +34,7 @@ export async function fetchDataFromAPI(params, apiURL) {
 				return dataArray;
 			});
 
+			console.log('dataSet: ', dataSet);
 			return dataSet;
 		})
 		.catch((error) => {
@@ -45,25 +45,4 @@ export async function fetchDataFromAPI(params, apiURL) {
 		});
 
 	return fetchedData;
-}
-
-function cleanData(item) {
-	const cleanedActivityBookings = JSON.parse(
-		item.activityBookings
-			.replace(/'/g, '"')
-			.replace(/False/g, 'false')
-			.replace(/True/g, 'true')
-			.replace(/None/g, 'null')
-			.replace(
-				/(?<=[A-Za-z0-9])"(?=[A-Za-z0-9])/g,
-				'SINGLE_QUOTE_STANDBY'
-			)
-			.replace(/\\x/g, '')
-			.replace(/="/g, '=&quot;')
-			.replace(/;"/g, ';&quot;')
-			.replace(/">/g, '&quot;&gt;')
-			.replace(/SINGLE_QUOTE_STANDBY/g, "'")
-	);
-
-	return cleanedActivityBookings[0];
 }

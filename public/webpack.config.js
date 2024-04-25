@@ -1,7 +1,8 @@
+const Webpack = require('webpack');
 const Path = require('path');
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlBundlerPlugin = require('html-bundler-webpack-plugin');
-const { type } = require('os');
-const loader = require('sass-loader');
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -14,17 +15,21 @@ module.exports = {
 	mode: isDev ? 'development' : 'production',
 	devtool: 'source-map',
 	output: {
-		path: Path.resolve(__dirname, 'dist/'),
+		path: Path.resolve(__dirname, 'build/'),
 	},
 	resolve: {
 		alias: {
+			'@images': Path.join(__dirname, 'src/images'),
 			'@scripts': Path.join(__dirname, 'src/scripts'),
 			'@styles': Path.join(__dirname, 'src/styles'),
-			'@images': Path.join(__dirname, 'src/images'),
 		},
 		modules: [Path.resolve(__dirname, 'node_modules'), 'node_modules'],
 	},
 	plugins: [
+		new Webpack.DefinePlugin({
+			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+			'process.env.API_URL': JSON.stringify(process.env.API_URL),
+		}),
 		new HtmlBundlerPlugin({
 			entry: Path.join(__dirname, 'src/pages/'),
 			preprocessor: 'handlebars',
@@ -39,15 +44,12 @@ module.exports = {
 			},
 			verbose: true,
 		}),
-		function () {
-			console.log('NODE_ENV: ', process.env.NODE_ENV);
-			console.log('isDev: ', isDev);
-			console.log(
-				'Resolved .env path: ',
-				Path.resolve(__dirname, `.env.${process.env.NODE_ENV}`)
-			);
-			console.log('BASE_URL: ', process.env.BASE_URL);
-		},
+		// function () {
+		// 	console.log('NODE_ENV: ', process.env.NODE_ENV);
+		// 	console.log('isDev: ', isDev);
+		// 	console.log('BASE_URL: ', process.env.BASE_URL);
+		// 	console.log('API_URL: ', process.env.API_URL);
+		// },
 	],
 	module: {
 		rules: [
@@ -88,7 +90,7 @@ module.exports = {
 	devServer: {
 		port: 8000,
 		open: false,
-		static: Path.resolve(__dirname, 'dist'),
+		static: Path.resolve(__dirname, 'build'),
 		watchFiles: {
 			paths: ['src/**/*.*'],
 			options: {
