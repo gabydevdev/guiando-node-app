@@ -1,13 +1,15 @@
+// home.js
 console.log('>> Home page');
 
-// if (document.readyState === 'loading') {
-// 	// Loading hasn't finished yet
-// 	document.addEventListener('DOMContentLoaded', doSomething);
-// } else {
-// 	// `DOMContentLoaded` has already fired
-// 	doSomething();
-// }
+import { setupDataTable } from '@scripts/dataTables';
 
-// async function doSomething() {
-// 	console.log('#bookingsTable: ', document.getElementById('bookingsTable'));
-// }
+document.addEventListener('tableComplete', async function () {
+	doSomething();
+});
+
+function doSomething() {
+	console.log('tableComplete event!');
+
+	var table = setupDataTable();
+	console.log('table: ', table);
+}
