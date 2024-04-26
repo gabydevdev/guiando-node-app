@@ -152,7 +152,7 @@ app.post(`${baseUrlPath}/zapier`, (req, res) => {
 	const bookingId = req.body.bookingId;
 
 	// Defines the path to the directory where booking logs will be stored
-	const logsDir = path.join(__dirname, "booking_logs");
+	const logsDir = path.join(__dirname, "booking_data");
 
 	// Ensures the existence of the 'booking_logs' directory, creating it if necessary
 	if (!fs.existsSync(logsDir)) {
