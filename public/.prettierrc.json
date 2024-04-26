@@ -5,7 +5,7 @@
 		{
 			"files":["*.js"],
 			"options": {
-				"singleQuote": true
+				"singleQuote": false
 			}
 		}
 	]
