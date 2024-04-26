@@ -3,7 +3,7 @@ export async function fetchDataFromAPI(apiURL, params) {
 	const query = new URLSearchParams(params).toString();
 
 	apiURL = `${apiURL}?${query}`;
-	console.log('apiURL: ', apiURL);
+	console.log("apiURL: ", apiURL);
 
 	const fetchedData = await fetch(apiURL)
 		.then((response) => response.json())
@@ -29,17 +29,17 @@ export async function fetchDataFromAPI(apiURL, params) {
 					totalPrice: totalPrice,
 				};
 
-				console.log('dataArray: ', dataArray);
+				// console.log('dataArray: ', dataArray);
 
 				return dataArray;
 			});
 
-			console.log('dataSet: ', dataSet);
+			// console.log('dataSet: ', dataSet);
 			return dataSet;
 		})
 		.catch((error) => {
 			console.error(
-				'There was a problem with your fetch operation:',
+				"There was a problem with your fetch operation:",
 				error
 			);
 		});

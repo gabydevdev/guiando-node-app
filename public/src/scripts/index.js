@@ -1,12 +1,12 @@
 // index.js
-import { Popover, Dropdown } from 'bootstrap';
-import { setupDataTable } from './dataTables';
+import { Popover, Dropdown } from "bootstrap";
+import { setupDataTable } from "./dataTables";
 
-let apiURL = process.env.API_URL + '/api/bookings';
+let apiURL = process.env.API_URL + "/api/bookings";
 
-if (document.readyState === 'loading') {
+if (document.readyState === "loading") {
 	// Loading hasn't finished yet
-	document.addEventListener('DOMContentLoaded', doSomething());
+	document.addEventListener("DOMContentLoaded", doSomething());
 } else {
 	// `DOMContentLoaded` has already fired
 	doSomething();
@@ -15,7 +15,7 @@ if (document.readyState === 'loading') {
 async function doSomething() {
 	initializeBootstrapComponents();
 
-	const tableEl = document.getElementById('bookingsTable');
+	const tableEl = document.getElementById("bookingsTable");
 	setupDataTable(tableEl, apiURL);
 }
 
