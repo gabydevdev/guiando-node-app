@@ -22,7 +22,8 @@ export function setupDataTable(selector, apiURL) {
 							day: "2-digit",
 						});
 					}
-					return data;
+
+					return d.toISOString(data);
 				},
 				title: "Created On",
 				name: "creationDate",
@@ -41,7 +42,11 @@ export function setupDataTable(selector, apiURL) {
 				title: "Traveler Name",
 				name: "customer",
 			},
-			{ data: "customer.phoneNumber", title: "Phone #", name: "phoneNumber" },
+			{
+				data: "customer.phoneNumber",
+				title: "Phone #",
+				name: "phoneNumber",
+			},
 			{
 				data: "activityBookings[0].dateString",
 				render: function (data, type) {
@@ -62,31 +67,47 @@ export function setupDataTable(selector, apiURL) {
 
 						return `${date}, ${time}`;
 					}
-					return data;
+
+					return d.toISOString(data);
 				},
-				title: "Travel Date",
 				name: "travelDate",
-				className: "travel-date date",
+				title: "Travel Date",
+				className: "date travelDate",
+				orderable: true,
+				createdCell: function (td, cellData) {
+					const d = new Date(cellData);
+					td.setAttribute("data-sort", Date.parse(d));
+					td.setAttribute("data-order", Date.parse(d));
+				},
 			},
-			{ data: "activityBookings[0].totalParticipants", title: "# PAX", name: "pax" },
+			{
+				data: "activityBookings[0].totalParticipants",
+				title: "# PAX",
+				name: "pax",
+			},
 			{
 				data: "totalPrice",
 				title: "Total Price",
 				name: "totalPrice",
 				className: "price currency",
 			},
-			{ data: "status", title: "Status", name: "status", className: "status" },
+			{
+				data: "status",
+				name: "status",
+				title: "Status",
+				className: "status",
+				createdCell: function (td, cellData) {
+					if (cellData === "CANCELED") {
+						td.classList.add("canceled");
+					}
+				},
+			},
 		],
 		paging: true,
 		autoWidth: false,
 		pageLength: 12,
 		lengthMenu: [6, 12, 24, 50],
 		ordering: true,
-		order: {
-			name: "travelDate",
-			dir: "asc"
-		},
-		retrieve: true,
 		initComplete: function () {
 			console.log("DataTables has finished initialisation.");
 
@@ -97,6 +118,8 @@ export function setupDataTable(selector, apiURL) {
 			document.dispatchEvent(evt);
 		},
 	});
+
+	table.order([{ name: "travelDate", dir: "asc" }]).draw();
 
 	// @see https://datatables.net/reference/api/init()#Description
 	// console.log(table.init());
