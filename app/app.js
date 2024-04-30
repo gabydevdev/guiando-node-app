@@ -8,7 +8,7 @@ require("dotenv").config(); // Loads environment variables from a .env file into
 const app = express();
 
 // This will enable CORS for all routes and origins
-const cors = require('cors');
+const cors = require("cors");
 app.use(cors());
 
 // Retrieve the base URL path and port from environment variables or use defaults
@@ -41,7 +41,10 @@ app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 
 		// Sort files by last modified time, descending
 		files.sort((a, b) => {
-			return fs.statSync(path.join(bookingsDataLogs, b)).mtime.getTime() - fs.statSync(path.join(bookingsDataLogs, a)).mtime.getTime();
+			return (
+				fs.statSync(path.join(bookingsDataLogs, b)).mtime.getTime() -
+				fs.statSync(path.join(bookingsDataLogs, a)).mtime.getTime()
+			);
 		});
 
 		const endIndex = start + length;
@@ -155,10 +158,13 @@ app.post(`${baseUrlPath}/zapier`, (req, res) => {
 		}
 
 		// Responds to indicate the action taken on the file
-		res.status(200).send(`File for booking ID ${bookingId} ${fs.existsSync(filePath) ? "updated" : "created"} in the booking_data folder.`);
+		res.status(200).send(
+			`File for booking ID ${bookingId} ${
+				fs.existsSync(filePath) ? "updated" : "created"
+			} in the booking_data folder.`
+		);
 	});
 });
-
 
 function cleanData(string) {
 	const formattedData = JSON.parse(
@@ -167,7 +173,10 @@ function cleanData(string) {
 			.replace(/False/g, "false")
 			.replace(/True/g, "true")
 			.replace(/None/g, "null")
-			.replace(/(?<=[A-Za-z0-9])"(?=[A-Za-z0-9])/g, "SINGLE_QUOTE_STANDBY")
+			.replace(
+				/(?<=[A-Za-z0-9])"(?=[A-Za-z0-9])/g,
+				"SINGLE_QUOTE_STANDBY"
+			)
 			.replace(/\\x/g, "")
 			.replace(/="/g, "=&quot;")
 			.replace(/;"/g, ";&quot;")
@@ -177,7 +186,6 @@ function cleanData(string) {
 
 	return formattedData;
 }
-
 
 // Starts the server on the configured port and logs a startup message
 app.listen(port, () => console.log(`Application is running on port ${port}`));
