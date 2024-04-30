@@ -8,7 +8,7 @@ require("dotenv").config(); // Loads environment variables from a .env file into
 const app = express();
 
 // This will enable CORS for all routes and origins
-const cors = require("cors");
+const cors = require('cors');
 app.use(cors());
 
 // Retrieve the base URL path and port from environment variables or use defaults
@@ -25,7 +25,6 @@ if (baseUrlPath) {
 // Middleware to parse JSON bodies in incoming requests
 app.use(express.json());
 
-// Defines the path to the directory where booking logs will be stored
 const bookingsDataLogs = path.join(__dirname, "booking_data");
 
 app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
@@ -54,34 +53,21 @@ app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 			let fileData = fs.readFileSync(filePath);
 			fileData = JSON.parse(fileData);
 
-			/* START clean and format functions */
-
-			// clean activitiBookings
 			let activityBookings = fileData.activityBookings;
-			delete fileData.activityBookings;
-			activityBookings = cleanData(activityBookings);
-			fileData.activityBookings = activityBookings;
-
-			// clean dateString
-			let dateString = fileData.activityBookings[0].dateString;
-			delete fileData.activityBookings[0].dateString;
-			dateString = dateString.replace(/ - /g, " ");
-			dateString = new Date(dateString);
-			fileData.activityBookings[0].dateString = dateString.toISOString();
-
-			// format creationDate
 			let creationDate = fileData.creationDate;
-			delete fileData.creationDate;
-			creationDate = new Date(parseInt(creationDate));
-			fileData.creationDate = creationDate;
-
-			// clean porductInvoices
 			let productInvoices = fileData.invoice.productInvoices;
-			delete fileData.invoice.productInvoices;
-			productInvoices = cleanData(productInvoices);
-			fileData.invoice.productInvoices = productInvoices;
 
-			/* END clean and format functions */
+			delete fileData.activityBookings;
+			delete fileData.creationDate;
+			delete fileData.invoice.productInvoices;
+
+			activityBookings = cleanData(activityBookings);
+			creationDate = new Date(parseInt(creationDate));
+			productInvoices = cleanData(productInvoices);
+
+			fileData.activityBookings = activityBookings;
+			fileData.creationDate = creationDate;
+			fileData.invoice.productInvoices = productInvoices;
 
 			bookings.push(fileData);
 		});
@@ -127,29 +113,28 @@ app.get(`${baseUrlPath}/api/bookings/single`, (req, res) => {
 	});
 });
 
+// ---------------------------------------------------------
+
 /**
- * GET endpoint for testing server responsiveness
- *
+ * GET endpoint for testing server responsiveness.
  * This endpoint dynamically adjusts based on the BASE_URL_PATH environment variable.
  *
- * @return {Response} Sends a text response confirming the successful GET request
+ * @return {Response} Sends a text response confirming the successful GET request.
  */
 app.get(`${baseUrlPath}/zapier`, (req, res) => {
 	res.status(200).send("GET request to the /zapier endpoint");
 });
 
 /**
- * POST endpoint to handle incoming JSON payloads with a "bookingId"
- *
+ * POST endpoint to handle incoming JSON payloads with a "bookingId".
  * It saves or updates a JSON file named after the "bookingId" in the "booking_logs" directory.
  * The endpoint's path is dynamically adjusted based on the BASE_URL_PATH environment variable.
  *
- * @param {Object} req.body - JSON payload of the request
- * @return {Response} A file was created or updated
+ * @param {Object} req.body - The JSON payload of the request, expected to contain "bookingId".
+ * @return {Response} Indicates whether the corresponding file was created or updated.
  */
 app.post(`${baseUrlPath}/zapier`, (req, res) => {
-	// Extracts the bookingId from the request body
-	const bookingId = req.body.bookingId;
+	const bookingId = req.body.bookingId; // Extracts the booking ID from the request body
 
 	// Defines the path to the directory where booking logs will be stored
 	const logsDir = path.join(__dirname, "booking_data");
@@ -174,6 +159,7 @@ app.post(`${baseUrlPath}/zapier`, (req, res) => {
 	});
 });
 
+
 function cleanData(string) {
 	const formattedData = JSON.parse(
 		string
@@ -191,6 +177,7 @@ function cleanData(string) {
 
 	return formattedData;
 }
+
 
 // Starts the server on the configured port and logs a startup message
 app.listen(port, () => console.log(`Application is running on port ${port}`));
