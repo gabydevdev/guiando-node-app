@@ -23,7 +23,7 @@ const bookingsDataLogs = path.join(__dirname, "booking_data");
 app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 	const page = parseInt(req.query.page) || 1;
 	const limit = parseInt(req.query.limit) || 12;
-	const sortBy = req.query.sortby || "creationDate"; // Default sort by creationDate
+	const sortBy = req.query.sortBy || "creationDate"; // Default sort by creationDate
 	const order = req.query.order || "desc"; // Default sort order
 
 	// const start = parseInt(req.query.start) || 0;
@@ -81,43 +81,43 @@ app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 			bookings.push(fileData);
 		});
 
-		// const today = new Date();
+		if (sortBy === "startDateTime") {
+			bookings.sort((a, b) => {
+				const dateA = new Date(a.activityBookings.startDateTime);
+				const dateB = new Date(b.activityBookings.startDateTime);
+				if (order === "asc") {
+					return dateA - dateB;
+				} else {
+					return dateB - dateA;
+				}
+			});
+		} else {
+			bookings.sort((a, b) => {
+				if (order === "asc") {
+					return a[sortBy] > b[sortBy] ? 1 : -1;
+				} else {
+					return a[sortBy] < b[sortBy] ? 1 : -1;
+				}
+			});
+		}
 
-		// const filteredBookings = bookings.filter((booking) => {
-		// 	const startDateTime = new Date(
-		// 		booking.activityBookings.startDateTime
-		// 	);
-		// 	return startDateTime >= today;
-		// });
+		const today = new Date();
 
-		// if (sortBy === "startDateTime") {
-		// 	filteredBookings.sort((a, b) => {
-		// 		const dateA = new Date(a.activityBookings.startDateTime);
-		// 		const dateB = new Date(b.activityBookings.startDateTime);
-		// 		if (order === "asc") {
-		// 			return dateA - dateB;
-		// 		} else {
-		// 			return dateB - dateA;
-		// 		}
-		// 	});
-		// } else {
-		// 	filteredBookings.sort((a, b) => {
-		// 		if (order === "asc") {
-		// 			return a[sortBy] > b[sortBy] ? 1 : -1;
-		// 		} else {
-		// 			return a[sortBy] < b[sortBy] ? 1 : -1;
-		// 		}
-		// 	});
-		// }
+		const results = bookings.filter((booking) => {
+			const startDateTime = new Date(
+				booking.activityBookings.startDateTime
+			);
+			return startDateTime >= today;
+		});
 
 		const startIndex = (page - 1) * limit;
 		const endIndex = startIndex + limit;
 
 		const result = {
-			total: bookings.length,
-			nextPage: endIndex < bookings.length ? page + 1 : null,
+			total: results.length,
+			nextPage: endIndex < results.length ? page + 1 : null,
 			prevPage: page > 1 ? page - 1 : null,
-			data: bookings.slice(startIndex, endIndex),
+			data: results.slice(startIndex, endIndex),
 		};
 
 		res.json(result);

@@ -15,8 +15,8 @@ if (document.readyState === "loading") {
 async function doSomething() {
 	initializeBootstrapComponents();
 
-	const tableEl = document.getElementById("bookingsTable");
-	setupDataTable(tableEl, apiURL);
+	// const tableEl = document.getElementById("bookingsTable");
+	// setupDataTable(tableEl, apiURL);
 }
 
 function initializeBootstrapComponents() {
