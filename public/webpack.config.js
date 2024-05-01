@@ -1,5 +1,6 @@
 const Webpack = require('webpack');
 const Path = require('path');
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlBundlerPlugin = require('html-bundler-webpack-plugin');
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -27,7 +28,9 @@ module.exports = {
 		new Webpack.DefinePlugin({
 			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
 			'process.env.API_URL': JSON.stringify(process.env.API_URL),
+			'process.env.FORM_URL': JSON.stringify(process.env.FORM_URL),
 		}),
+		new CleanWebpackPlugin(),
 		new HtmlBundlerPlugin({
 			entry: Path.join(__dirname, 'src/pages/'),
 			preprocessor: 'handlebars',
@@ -35,19 +38,13 @@ module.exports = {
 				partials: ['src/partials/', 'src/pages/'],
 			},
 			js: {
-				filename: 'js/[name].[contenthash:8].js',
+				filename: 'js/[name].js',
 			},
 			css: {
-				filename: 'css/[name].[contenthash:8].css',
+				filename: 'css/[name].css',
 			},
 			verbose: true,
 		}),
-		// function () {
-		// 	console.log('NODE_ENV: ', process.env.NODE_ENV);
-		// 	console.log('isDev: ', isDev);
-		// 	console.log('BASE_URL: ', process.env.BASE_URL);
-		// 	console.log('API_URL: ', process.env.API_URL);
-		// },
 	],
 	module: {
 		rules: [
