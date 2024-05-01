@@ -1,36 +1,33 @@
-// Import the necessary Node.js modules
-const express = require("express"); // Handles HTTP requests
-const fs = require("fs"); // Performs file system operations
-const path = require("path"); // Manages file and directory paths
-require("dotenv").config(); // Loads environment variables from a .env file into process.env
-
-// Create an Express application instance
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
+require("dotenv").config();
 const app = express();
 
-// This will enable CORS for all routes and origins
 const cors = require("cors");
 app.use(cors());
 
-// Retrieve the base URL path and port from environment variables or use defaults
 const baseUrlPath = process.env.BASE_URL_PATH || "";
 const port = process.env.PORT || 3000;
 
-// Serve static files from the 'public' directory
 if (baseUrlPath) {
 	app.use(baseUrlPath, express.static(path.join(__dirname, "public")));
 } else {
 	app.use("/", express.static(path.join(__dirname, "public")));
 }
 
-// Middleware to parse JSON bodies in incoming requests
 app.use(express.json());
 
 const bookingsDataLogs = path.join(__dirname, "booking_data");
 
 app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
-	// Get query parameters
-	const start = parseInt(req.query.start) || 0;
-	const length = parseInt(req.query.length) || 10;
+	const page = parseInt(req.query.page) || 1;
+	const limit = parseInt(req.query.limit) || 12;
+	const sortBy = req.query.sortby || "creationDate"; // Default sort by creationDate
+	const order = req.query.order || "desc"; // Default sort order
+
+	// const start = parseInt(req.query.start) || 0;
+	// const length = parseInt(req.query.length) || 10;
 
 	fs.readdir(bookingsDataLogs, (err, files) => {
 		if (err) {
@@ -39,7 +36,6 @@ app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 			return;
 		}
 
-		// Sort files by last modified time, descending
 		files.sort((a, b) => {
 			return (
 				fs.statSync(path.join(bookingsDataLogs, b)).mtime.getTime() -
@@ -47,50 +43,90 @@ app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 			);
 		});
 
-		const endIndex = start + length;
-
 		const bookings = [];
-		files.slice(start, endIndex).forEach((file) => {
+
+		files.forEach((file) => {
 			const filePath = path.join(bookingsDataLogs, file);
 
 			let fileData = fs.readFileSync(filePath);
 			fileData = JSON.parse(fileData);
 
+			const creationDate = new Date(parseInt(fileData.creationDate));
+			fileData.creationDate = creationDate.toISOString();
+
 			let activityBookings = fileData.activityBookings;
-			let creationDate = fileData.creationDate;
-			let productInvoices = fileData.invoice.productInvoices;
-
-			delete fileData.activityBookings;
-			delete fileData.creationDate;
-			delete fileData.invoice.productInvoices;
-
 			activityBookings = cleanData(activityBookings);
-			creationDate = new Date(parseInt(creationDate));
-			productInvoices = cleanData(productInvoices);
-
+			activityBookings = activityBookings[0];
 			fileData.activityBookings = activityBookings;
-			fileData.creationDate = creationDate;
+
+			const startDateTime = new Date(
+				fileData.activityBookings.startDateTime
+			);
+			fileData.activityBookings.startDateTime =
+				startDateTime.toISOString();
+
+			const endDateTime = new Date(fileData.activityBookings.endDateTime);
+			fileData.activityBookings.endDateTime = endDateTime.toISOString();
+
+			let customerPayments = fileData.customerPayments;
+			customerPayments = cleanData(customerPayments);
+			customerPayments = customerPayments[0];
+			fileData.customerPayments = customerPayments;
+
+			let productInvoices = fileData.invoice.productInvoices;
+			productInvoices = cleanData(productInvoices);
+			productInvoices = productInvoices[0];
 			fileData.invoice.productInvoices = productInvoices;
 
 			bookings.push(fileData);
 		});
 
+		// const today = new Date();
+
+		// const filteredBookings = bookings.filter((booking) => {
+		// 	const startDateTime = new Date(
+		// 		booking.activityBookings.startDateTime
+		// 	);
+		// 	return startDateTime >= today;
+		// });
+
+		// if (sortBy === "startDateTime") {
+		// 	filteredBookings.sort((a, b) => {
+		// 		const dateA = new Date(a.activityBookings.startDateTime);
+		// 		const dateB = new Date(b.activityBookings.startDateTime);
+		// 		if (order === "asc") {
+		// 			return dateA - dateB;
+		// 		} else {
+		// 			return dateB - dateA;
+		// 		}
+		// 	});
+		// } else {
+		// 	filteredBookings.sort((a, b) => {
+		// 		if (order === "asc") {
+		// 			return a[sortBy] > b[sortBy] ? 1 : -1;
+		// 		} else {
+		// 			return a[sortBy] < b[sortBy] ? 1 : -1;
+		// 		}
+		// 	});
+		// }
+
+		const startIndex = (page - 1) * limit;
+		const endIndex = startIndex + limit;
+
 		const result = {
-			draw: parseInt(req.query.draw),
-			recordsTotal: files.length,
-			recordsFiltered: files.length,
-			data: bookings,
+			total: bookings.length,
+			nextPage: endIndex < bookings.length ? page + 1 : null,
+			prevPage: page > 1 ? page - 1 : null,
+			data: bookings.slice(startIndex, endIndex),
 		};
 
 		res.json(result);
 	});
 });
 
-app.get(`${baseUrlPath}/api/bookings/single`, (req, res) => {
-	const bookingIdQuery = req.query.bookingId; // Retrieve the bookingId from query parameters
-
+app.get(`${baseUrlPath}/api/booking/single`, (req, res) => {
+	const bookingIdQuery = req.query.bookingId;
 	if (!bookingIdQuery) {
-		// Respond with an error or empty array if no bookingId is specified
 		return res.status(400).json({ message: "Booking ID required" });
 	}
 
@@ -104,60 +140,68 @@ app.get(`${baseUrlPath}/api/bookings/single`, (req, res) => {
 		let single = [];
 		files.forEach((file) => {
 			const filePath = path.join(bookingsDataLogs, file);
-			const bookingData = JSON.parse(fs.readFileSync(filePath, "utf8"));
+			const fileData = JSON.parse(fs.readFileSync(filePath));
 
-			if (!bookingIdQuery || bookingData.bookingId === bookingIdQuery) {
-				single.push(bookingData);
+			if (fileData.bookingId === bookingIdQuery) {
+				const creationDate = new Date(parseInt(fileData.creationDate));
+				fileData.creationDate = creationDate.toISOString();
+
+				let activityBookings = fileData.activityBookings;
+				activityBookings = cleanData(activityBookings);
+				activityBookings = activityBookings[0];
+				fileData.activityBookings = activityBookings;
+
+				const startDateTime = new Date(
+					fileData.activityBookings.startDateTime
+				);
+				fileData.activityBookings.startDateTime =
+					startDateTime.toISOString();
+
+				const endDateTime = new Date(
+					fileData.activityBookings.endDateTime
+				);
+				fileData.activityBookings.endDateTime =
+					endDateTime.toISOString();
+
+				let customerPayments = fileData.customerPayments;
+				customerPayments = cleanData(customerPayments);
+				customerPayments = customerPayments[0];
+				fileData.customerPayments = customerPayments;
+
+				let productInvoices = fileData.invoice.productInvoices;
+				productInvoices = cleanData(productInvoices);
+				productInvoices = productInvoices[0];
+				fileData.invoice.productInvoices = productInvoices;
+
+				single.push(fileData);
 			}
 		});
 
-		// Optionally, sort and paginate results here if necessary
 		res.json(single);
 	});
 });
 
-// ---------------------------------------------------------
-
-/**
- * GET endpoint for testing server responsiveness.
- * This endpoint dynamically adjusts based on the BASE_URL_PATH environment variable.
- *
- * @return {Response} Sends a text response confirming the successful GET request.
- */
+// WEBHOOKS ---------------------------------------
 app.get(`${baseUrlPath}/zapier`, (req, res) => {
 	res.status(200).send("GET request to the /zapier endpoint");
 });
 
-/**
- * POST endpoint to handle incoming JSON payloads with a "bookingId".
- * It saves or updates a JSON file named after the "bookingId" in the "booking_logs" directory.
- * The endpoint's path is dynamically adjusted based on the BASE_URL_PATH environment variable.
- *
- * @param {Object} req.body - The JSON payload of the request, expected to contain "bookingId".
- * @return {Response} Indicates whether the corresponding file was created or updated.
- */
 app.post(`${baseUrlPath}/zapier`, (req, res) => {
-	const bookingId = req.body.bookingId; // Extracts the booking ID from the request body
-
-	// Defines the path to the directory where booking logs will be stored
+	const bookingId = req.body.bookingId;
 	const logsDir = path.join(__dirname, "booking_data");
 
-	// Ensures the existence of the 'booking_logs' directory, creating it if necessary
 	if (!fs.existsSync(logsDir)) {
 		fs.mkdirSync(logsDir, { recursive: true });
 	}
 
-	// Constructs the full path for the new or existing file
 	const filePath = path.join(logsDir, `${bookingId}.json`);
 
-	// Writes the JSON payload to the file, creating or overwriting it as needed
 	fs.writeFile(filePath, JSON.stringify(req.body, null, 2), (err) => {
 		if (err) {
 			console.error("Error writing file:", err);
 			return res.status(500).send("Error processing request");
 		}
 
-		// Responds to indicate the action taken on the file
 		res.status(200).send(
 			`File for booking ID ${bookingId} ${
 				fs.existsSync(filePath) ? "updated" : "created"
@@ -166,6 +210,37 @@ app.post(`${baseUrlPath}/zapier`, (req, res) => {
 	});
 });
 
+// START TEST ENDPOINTS ---------------------------
+app.get(`${baseUrlPath}/test`, (req, res) => {
+	res.status(200).send("GET request to the /test endpoint");
+});
+
+app.post(`${baseUrlPath}/test`, (req, res) => {
+	const bookingId = req.body.bookingId;
+	const logsDir = path.join(__dirname, "booking_test_logs");
+
+	if (!fs.existsSync(logsDir)) {
+		fs.mkdirSync(logsDir, { recursive: true });
+	}
+
+	const filePath = path.join(logsDir, `${bookingId}.json`);
+
+	fs.writeFile(filePath, JSON.stringify(req.body, null, 2), (err) => {
+		if (err) {
+			console.error("Error writing file:", err);
+			return res.status(500).send("Error processing request");
+		}
+
+		res.status(200).send(
+			`File for booking ID ${bookingId} ${
+				fs.existsSync(filePath) ? "updated" : "created"
+			} in the booking_test_logs folder.`
+		);
+	});
+});
+// ------------------------------------------------
+
+// Cleaning function for JSON
 function cleanData(string) {
 	const formattedData = JSON.parse(
 		string
@@ -187,5 +262,4 @@ function cleanData(string) {
 	return formattedData;
 }
 
-// Starts the server on the configured port and logs a startup message
 app.listen(port, () => console.log(`Application is running on port ${port}`));
