@@ -51,22 +51,29 @@ app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 			let fileData = fs.readFileSync(filePath);
 			fileData = JSON.parse(fileData);
 
-			const creationDate = new Date(parseInt(fileData.creationDate));
-			fileData.creationDate = creationDate.toISOString();
+			// const creationDate = new Date(parseInt(fileData.creationDate));
+			// fileData.creationDate = creationDate.toISOString();
 
 			let activityBookings = fileData.activityBookings;
 			activityBookings = cleanData(activityBookings);
 			activityBookings = activityBookings[0];
 			fileData.activityBookings = activityBookings;
 
-			const startDateTime = new Date(
-				fileData.activityBookings.startDateTime
-			);
-			fileData.activityBookings.startDateTime =
-				startDateTime.toISOString();
+			let invoiceDates = fileData.activityBookings.invoice.dates;
+			invoiceDates = invoiceDates.replace(/ - /g, ", ");
+			// invoiceDates = Date.parse(invoiceDates);
+			fileData.activityBookings.invoice.dates = new Date(
+				invoiceDates
+			).toISOString();
 
-			const endDateTime = new Date(fileData.activityBookings.endDateTime);
-			fileData.activityBookings.endDateTime = endDateTime.toISOString();
+			// const startDateTime = new Date(
+			// 	fileData.activityBookings.startDateTime
+			// );
+			// fileData.activityBookings.startDateTime =
+			// 	startDateTime.toISOString();
+
+			// const endDateTime = new Date(fileData.activityBookings.endDateTime);
+			// fileData.activityBookings.endDateTime = endDateTime.toISOString();
 
 			let customerPayments = fileData.customerPayments;
 			customerPayments = cleanData(customerPayments);
@@ -143,25 +150,32 @@ app.get(`${baseUrlPath}/api/booking/single`, (req, res) => {
 			const fileData = JSON.parse(fs.readFileSync(filePath));
 
 			if (fileData.bookingId === bookingIdQuery) {
-				const creationDate = new Date(parseInt(fileData.creationDate));
-				fileData.creationDate = creationDate.toISOString();
+				// const creationDate = new Date(parseInt(fileData.creationDate));
+				// fileData.creationDate = creationDate.toISOString();
 
 				let activityBookings = fileData.activityBookings;
 				activityBookings = cleanData(activityBookings);
 				activityBookings = activityBookings[0];
 				fileData.activityBookings = activityBookings;
 
-				const startDateTime = new Date(
-					fileData.activityBookings.startDateTime
-				);
-				fileData.activityBookings.startDateTime =
-					startDateTime.toISOString();
+				let invoiceDates = fileData.activityBookings.invoice.dates;
+				invoiceDates = invoiceDates.replace(/ - /g, ", ");
+				// invoiceDates = Date.parse(invoiceDates);
+				fileData.activityBookings.invoice.dates = new Date(
+					invoiceDates
+				).toISOString();
 
-				const endDateTime = new Date(
-					fileData.activityBookings.endDateTime
-				);
-				fileData.activityBookings.endDateTime =
-					endDateTime.toISOString();
+				// const startDateTime = new Date(
+				// 	fileData.activityBookings.startDateTime
+				// );
+				// fileData.activityBookings.startDateTime =
+				// 	startDateTime.toISOString();
+
+				// const endDateTime = new Date(
+				// 	fileData.activityBookings.endDateTime
+				// );
+				// fileData.activityBookings.endDateTime =
+				// 	endDateTime.toISOString();
 
 				let customerPayments = fileData.customerPayments;
 				customerPayments = cleanData(customerPayments);
