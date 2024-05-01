@@ -1,10 +1,17 @@
 <h1>API Test</h1>
 
+<label for="filterDate">Filter by Date:</label>
+<select id="filterDate">
+	<option value="">All Dates</option>
+	<!-- Populate options with unique startDateTime values -->
+</select>
+
+
 <table id="bookingsTable" class="table">
 	<thead>
 		<tr>
 			<th>Booking ID</th>
-			<th>Start Date Time</th>
+			<th>Travel Date</th>
 			<th>Creation Date</th>
 			<!-- Add more columns as needed -->
 		</tr>
@@ -15,3 +22,10 @@
 	<caption>Total entries: <span id="totalEntries"></span></caption>
 </table>
 
+<div id="pagination">
+	<button id="firstPage">First</button>
+	<button id="prevPage">Prev</button>
+	<span id="currentPage"></span>
+	<button id="nextPage">Next</button>
+	<button id="lastPage">Last</button>
+</div>
