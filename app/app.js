@@ -51,8 +51,8 @@ app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 			let fileData = fs.readFileSync(filePath);
 			fileData = JSON.parse(fileData);
 
-			// const creationDate = new Date(parseInt(fileData.creationDate));
-			// fileData.creationDate = creationDate.toISOString();
+			const creationDate = new Date(parseInt(fileData.creationDate));
+			fileData.creationDate = creationDate.toISOString();
 
 			let activityBookings = fileData.activityBookings;
 			activityBookings = cleanData(activityBookings);
