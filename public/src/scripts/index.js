@@ -1,8 +1,18 @@
 // index.js
 import { Popover, Dropdown } from "bootstrap";
-import { setupDataTable } from "./dataTables";
+// import { setupDataTable } from "./dataTables";
 
-let apiURL = process.env.API_URL + "/api/bookings";
+export const apiURL = process.env.API_URL + "/api/bookings";
+export const localeStringOptions = {
+	hour12: false,
+	timeZone: "America/Los_Angeles",
+	weekday: "short",
+	year: "numeric",
+	month: "short",
+	day: "2-digit",
+	hour: "2-digit",
+	minute: "2-digit",
+};
 
 if (document.readyState === "loading") {
 	// Loading hasn't finished yet
