@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 	// Populate the filter dropdown with unique startDateTime values
 	const filterDropdown = document.getElementById("filterDate");
 	const uniqueDates = [
+		// eslint-disable-next-line no-undef
 		...new Set(
 			bookings.data.map(
 				(booking) => booking.activityBookings.invoice.dates
@@ -91,6 +92,17 @@ async function populateTable(apiURL, params, page, filterDate) {
 		bookingsData = bookingsData.filter((booking) => {
 			return booking.activityBookings.invoice.dates === filterDate;
 		});
+
+		console.log("bookingsData: ", JSON.stringify(bookingsData));
+
+		const formButton = document.getElementById("requestForm");
+		formButton.addEventListener("click", () => {
+			localStorage.setItem(
+				"selectedBookings",
+				JSON.stringify(bookingsData)
+			);
+			window.location.href = process.env.FORM_URL;
+		});
 	}
 
 	const tableBody = document.querySelector("#bookingsTable tbody");
@@ -100,6 +112,7 @@ async function populateTable(apiURL, params, page, filterDate) {
 	bookingsData.forEach((booking) => {
 		const row = tableBody.insertRow();
 
+		const creationDate = booking.creationDate;
 		const invoiceDates = booking.activityBookings.invoice.dates;
 
 		row.insertCell().textContent = booking.bookingId;
@@ -107,16 +120,25 @@ async function populateTable(apiURL, params, page, filterDate) {
 			"en-US",
 			localeStringOptions
 		);
-		row.insertCell().textContent = booking.creationDate;
+		row.insertCell().textContent =
+			booking.activityBookings.product.externalId;
+		row.insertCell().textContent = `${booking.customer.firstName} ${booking.customer.lastName}`;
+		row.insertCell().textContent =
+			booking.activityBookings.totalParticipants;
+		row.insertCell().textContent = booking.customer.phoneNumber;
+		row.insertCell().textContent = new Date(creationDate).toLocaleString(
+			"en-US",
+			localeStringOptions
+		);
 		// Add more cells for other booking details as needed
 	});
 
 	// Update total entries caption
-	document.getElementById("totalEntries").textContent = bookings.total;
+	document.getElementById("totalEntries").textContent = bookingsData.length;
 
 	// Update pagination controls
 	document.getElementById("currentPage").textContent = `Page ${page}`;
 
-	const totalPages = Math.ceil(bookings.total / params.limit);
+	const totalPages = Math.ceil(bookingsData.length / params.limit);
 	updatePaginationControls(page, totalPages);
 }
