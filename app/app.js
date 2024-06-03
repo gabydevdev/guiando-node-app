@@ -59,21 +59,14 @@ app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 			activityBookings = activityBookings[0];
 			fileData.activityBookings = activityBookings;
 
+			let externalId = fileData.activityBookings.product.externalId;
+			fileData.externalId = externalId;
+
 			let invoiceDates = fileData.activityBookings.invoice.dates;
 			invoiceDates = invoiceDates.replace(/ - /g, ", ");
-			// invoiceDates = Date.parse(invoiceDates);
 			fileData.activityBookings.invoice.dates = new Date(
 				invoiceDates
 			).toISOString();
-
-			// const startDateTime = new Date(
-			// 	fileData.activityBookings.startDateTime
-			// );
-			// fileData.activityBookings.startDateTime =
-			// 	startDateTime.toISOString();
-
-			// const endDateTime = new Date(fileData.activityBookings.endDateTime);
-			// fileData.activityBookings.endDateTime = endDateTime.toISOString();
 
 			let customerPayments = fileData.customerPayments;
 			customerPayments = cleanData(customerPayments);
