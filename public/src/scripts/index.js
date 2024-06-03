@@ -16,13 +16,13 @@ export const localeStringOptions = {
 
 if (document.readyState === "loading") {
 	// Loading hasn't finished yet
-	document.addEventListener("DOMContentLoaded", doSomething());
+	document.addEventListener("DOMContentLoaded", init());
 } else {
 	// `DOMContentLoaded` has already fired
-	doSomething();
+	init();
 }
 
-async function doSomething() {
+async function init() {
 	initializeBootstrapComponents();
 
 	// const tableEl = document.getElementById("bookingsTable");
