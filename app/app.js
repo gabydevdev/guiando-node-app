@@ -25,6 +25,8 @@ app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 	const limit = parseInt(req.query.limit) || 12;
 	const sortBy = req.query.sortBy || "creationDate"; // Default sort by creationDate
 	const order = req.query.order || "desc"; // Default sort order
+	const startDate = new Date(req.query.startDate);
+	const endDate = new Date(req.query.endDate);
 
 	fs.readdir(bookingsDataLogs, (err, files) => {
 		if (err) {
@@ -104,7 +106,10 @@ app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 			const startDateTime = new Date(
 				booking.activityBookings.startDateTime
 			);
-			return startDateTime >= today;
+			return startDateTime >= today &&
+				(!isNaN(startDate) ? startDateTime >= startDate : true) &&
+                (!isNaN(endDate) ? startDateTime <= endDate : true);
+
 		});
 
 		const startIndex = (page - 1) * limit;
