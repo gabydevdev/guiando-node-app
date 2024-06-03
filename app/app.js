@@ -20,12 +20,12 @@ app.use(express.json());
 
 const bookingsDataLogs = path.join(__dirname, "booking_data");
 
-const page = parseInt(req.query.page) || 1;
-const limit = parseInt(req.query.limit) || 12;
-const sortBy = req.query.sortBy || "creationDate"; // Default sort by creationDate
-const order = req.query.order || "desc"; // Default sort order
-const startDate = new Date(req.query.startDate);
-const endDate = new Date(req.query.endDate);
+app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
+	const page = parseInt(req.query.page) || 1;
+	const limit = parseInt(req.query.limit) || 12;
+	const sortBy = req.query.sortBy || "creationDate"; // Default sort by creationDate
+	const order = req.query.order || "desc"; // Default sort order
+
 	fs.readdir(bookingsDataLogs, (err, files) => {
 		if (err) {
 			console.error("Could not list the directory.", err);
