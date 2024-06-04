@@ -30,6 +30,7 @@
 				"ignore": ["attribute", "class"]
 			}
 		],
+		"scss/at-rule-conditional-no-parentheses": null,
 		"scss/double-slash-comment-empty-line-before": [
 			"always",
 			{
@@ -37,7 +38,12 @@
 				"ignore": ["between-comments", "inside-block"]
 			}
 		],
-		"scss/at-rule-conditional-no-parentheses": null
+		"scss/dollar-variable-empty-line-before": [
+			"never",
+			{
+				"ignore": ["after-dollar-variable"]
+			}
+		]
 	},
 	"ignoreFiles": ["**/*.js", "**/*.html"]
 }
