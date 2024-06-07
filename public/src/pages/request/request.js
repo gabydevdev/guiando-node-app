@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 	const startDateField = document.getElementById("date_1");
 	const endDateField = document.getElementById("date_2");
 	const tableBody = document.querySelector("#checkbox_2 tbody");
-	const totalPaxField = document.querySelector("#totalPax input");
 
 	startDateField.addEventListener("change", handleDateChange);
 	endDateField.addEventListener("change", handleDateChange);
@@ -138,4 +137,48 @@ async function populateTable(apiURL, params) {
 		// Phone
 		row.insertCell().textContent = phoneNumber;
 	});
+
+	// Dispatch the custom event
+	document.dispatchEvent(new Event("populateTableComplete"));
 }
+
+document.addEventListener("populateTableComplete", function () {
+	console.log("Table population is complete.");
+
+	// Find all checkboxes in the booking data table
+	let checkboxes = document.querySelectorAll("#checkbox_2 input[type='checkbox']");
+	console.log("checkboxes: ", checkboxes);
+
+	// Add the event listener to each checkbox
+	checkboxes.forEach((cb) => {
+		cb.addEventListener("change", (event) => {
+			console.log("event: ", event);
+
+			if (cb.checked) {
+				console.log("checked!!");
+			} else {
+				console.log("unchecked...");
+			}
+
+			updatePaxTotal(event);
+		});
+	});
+});
+
+function updatePaxTotal(event) {
+	const cb = event.target;
+	const paxData = parseInt(cb.dataset.pax, 10);
+
+	const totalPaxField = document.querySelector("#totalPax input");
+	let paxTotal = parseInt(totalPaxField.value, 10);
+
+	if (cb.checked) {
+		paxTotal += paxData;
+	} else {
+		paxTotal -= paxData;
+	}
+
+	// Update the totalPaxField with the new paxTotal
+	totalPaxField.value = paxTotal;
+}
+
