@@ -70,6 +70,7 @@ async function populateTable(apiURL, params) {
 
 	bookingsData.forEach((booking, i) => {
 		// Booking values required
+		const { bookingId } = booking;
 		const { externalId } = booking.activityBookings.product;
 		const customerName = `${booking.customer.firstName} ${booking.customer.lastName}`;
 
@@ -84,6 +85,7 @@ async function populateTable(apiURL, params) {
 
 		// Collect values into an object
 		const bookingValues = {
+			bookingId: bookingId,
 			externalId: externalId,
 			customerName: customerName,
 			invoiceDates: invoiceDates,
@@ -108,7 +110,8 @@ async function populateTable(apiURL, params) {
 
 		cb.value = bookingValuesJSON;
 
-		cb.setAttribute("data-refid", externalId);
+		cb.setAttribute("data-booking", bookingId);
+		cb.setAttribute("data-tour", externalId);
 		cb.setAttribute("data-name", customerName);
 		cb.setAttribute("data-date", invoiceDates);
 		cb.setAttribute("data-pax", pax);
@@ -117,8 +120,10 @@ async function populateTable(apiURL, params) {
 		cell_cb.appendChild(cb);
 
 		// Create info table cells
-		//
-		// Reference #
+		// Booking Id
+		row.insertCell().textContent = bookingId;
+
+		// Tour
 		row.insertCell().textContent = externalId;
 
 		// Traveler Name
