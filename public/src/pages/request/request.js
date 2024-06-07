@@ -17,49 +17,42 @@ document.addEventListener("DOMContentLoaded", async function () {
 	bookings = await fetchDataFromAPI(apiURL, params);
 	console.log("all bookings: ", bookings.total);
 
-	// End Date Field
+	const startDateField = document.getElementById("date_1");
 	const endDateField = document.getElementById("date_2");
+	const tableBody = document.querySelector("#checkbox_2 tbody");
+	const totalPaxField = document.querySelector("#totalPax input");
 
-	// If start date field is empty, end date field should be disabled.
-	document
-		.getElementById("date_1")
-		.addEventListener("change", (event) => {
+	startDateField.addEventListener("change", handleDateChange);
+	endDateField.addEventListener("change", handleDateChange);
+
+	function handleDateChange(event) {
+		if (event.target.id === "date_1") {
 			startDate = event.target.value;
-
-			if (startDate) {
-				endDateField.disabled = false;
-			} else {
-				// Clear and disable end date field if start date is cleared.
-				endDateField.disabled = true;
-				endDateField.value = "";
-			}
-
-			console.log('startDate: ', startDate);
-			return startDate;
-		});
-
-	console.log('startDate: ', startDate);
-
-	endDateField
-		.addEventListener("change", (event) => {
+			endDateField.disabled = !startDate;
+			if (!startDate) endDateField.value = "";
+		} else {
 			endDate = event.target.value;
-			console.log('endDate: ', endDate);
+		}
 
-			if (!startDate || !endDate) {
-				return;
-			}
+		console.log("startDate: ", startDate);
+		console.log("endDate: ", endDate);
 
-			// Define API parameters
-			params = {
-				limit: limit,
-				page: currentPage,
-				sortBy: "startDateTime",
-				startDate: startDate,
-				endDate: endDate,
-			};
+		if (!startDate || !endDate) {
+			tableBody.style.display = "none";
+			return;
+		}
 
-			populateTable(apiURL, params);
-		});
+		params = {
+			limit: limit,
+			page: currentPage,
+			sortBy: "startDateTime",
+			startDate: startDate,
+			endDate: endDate,
+		};
+
+		tableBody.style.display = "";
+		populateTable(apiURL, params);
+	}
 });
 
 // Function to populate the table with bookings data
@@ -67,7 +60,7 @@ async function populateTable(apiURL, params) {
 	const bookings = await fetchDataFromAPI(apiURL, { ...params });
 	const bookingsData = bookings.data;
 
-	console.log('total bookings: ', bookings.total);
+	console.log("total bookings: ", bookings.total);
 
 	// Update total entries caption
 	document.getElementById("totalEntries").textContent = bookings.total;
@@ -90,16 +83,16 @@ async function populateTable(apiURL, params) {
 		const phoneNumber = booking.customer.phoneNumber;
 
 		// Collect values into an object
-        const bookingValues = {
-            externalId: externalId,
-            customerName: customerName,
-            invoiceDates: invoiceDates,
-            pax: pax,
-            phoneNumber: phoneNumber
-        };
+		const bookingValues = {
+			externalId: externalId,
+			customerName: customerName,
+			invoiceDates: invoiceDates,
+			pax: pax,
+			phoneNumber: phoneNumber,
+		};
 
-        // Convert object to JSON string
-        const bookingValuesJSON = JSON.stringify(bookingValues);
+		// Convert object to JSON string
+		const bookingValuesJSON = JSON.stringify(bookingValues);
 
 		// Create table row
 		const row = tableBody.insertRow();
@@ -109,17 +102,17 @@ async function populateTable(apiURL, params) {
 		cell_cb.id = "cell_cb";
 
 		const cb = document.createElement("input");
-		cb.setAttribute('type', 'checkbox');
-		cb.setAttribute('name', 'checkbox_2[]');
-		cb.setAttribute('id', 'checkbox_2_' + i);
+		cb.setAttribute("type", "checkbox");
+		cb.setAttribute("name", "checkbox_2[]");
+		cb.setAttribute("id", "checkbox_2_" + i);
 
 		cb.value = bookingValuesJSON;
 
-		cb.setAttribute('data-refid', externalId);
-		cb.setAttribute('data-name', customerName);
-		cb.setAttribute('data-date', invoiceDates);
-		cb.setAttribute('data-pax', pax);
-		cb.setAttribute('data-phone', phoneNumber);
+		cb.setAttribute("data-refid", externalId);
+		cb.setAttribute("data-name", customerName);
+		cb.setAttribute("data-date", invoiceDates);
+		cb.setAttribute("data-pax", pax);
+		cb.setAttribute("data-phone", phoneNumber);
 
 		cell_cb.appendChild(cb);
 
