@@ -13,6 +13,15 @@ export const localeStringOptions = {
 	hour: "2-digit",
 	minute: "2-digit",
 };
+export const localeStringShort = {
+	hour12: true,
+	timeZone: "America/Los_Angeles",
+	year: "numeric",
+	month: "short",
+	day: "2-digit",
+	hour: "2-digit",
+	minute: "2-digit",
+};
 
 if (document.readyState === "loading") {
 	// Loading hasn't finished yet

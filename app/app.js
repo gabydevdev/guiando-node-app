@@ -25,9 +25,8 @@ app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 	const limit = parseInt(req.query.limit) || 12;
 	const sortBy = req.query.sortBy || "creationDate"; // Default sort by creationDate
 	const order = req.query.order || "desc"; // Default sort order
-
-	// const start = parseInt(req.query.start) || 0;
-	// const length = parseInt(req.query.length) || 10;
+	const startDate = new Date(req.query.startDate);
+	const endDate = new Date(req.query.endDate);
 
 	fs.readdir(bookingsDataLogs, (err, files) => {
 		if (err) {
@@ -107,7 +106,10 @@ app.get(`${baseUrlPath}/api/bookings`, (req, res) => {
 			const startDateTime = new Date(
 				booking.activityBookings.startDateTime
 			);
-			return startDateTime >= today;
+			return startDateTime >= today &&
+				(!isNaN(startDate) ? startDateTime >= startDate : true) &&
+                (!isNaN(endDate) ? startDateTime <= endDate : true);
+
 		});
 
 		const startIndex = (page - 1) * limit;
@@ -158,18 +160,6 @@ app.get(`${baseUrlPath}/api/booking/single`, (req, res) => {
 					invoiceDates
 				).toISOString();
 
-				// const startDateTime = new Date(
-				// 	fileData.activityBookings.startDateTime
-				// );
-				// fileData.activityBookings.startDateTime =
-				// 	startDateTime.toISOString();
-
-				// const endDateTime = new Date(
-				// 	fileData.activityBookings.endDateTime
-				// );
-				// fileData.activityBookings.endDateTime =
-				// 	endDateTime.toISOString();
-
 				let customerPayments = fileData.customerPayments;
 				customerPayments = cleanData(customerPayments);
 				customerPayments = customerPayments[0];
@@ -216,36 +206,6 @@ app.post(`${baseUrlPath}/zapier`, (req, res) => {
 		);
 	});
 });
-
-// START TEST ENDPOINTS ---------------------------
-app.get(`${baseUrlPath}/test`, (req, res) => {
-	res.status(200).send("GET request to the /test endpoint");
-});
-
-app.post(`${baseUrlPath}/test`, (req, res) => {
-	const bookingId = req.body.bookingId;
-	const logsDir = path.join(__dirname, "booking_test_logs");
-
-	if (!fs.existsSync(logsDir)) {
-		fs.mkdirSync(logsDir, { recursive: true });
-	}
-
-	const filePath = path.join(logsDir, `${bookingId}.json`);
-
-	fs.writeFile(filePath, JSON.stringify(req.body, null, 2), (err) => {
-		if (err) {
-			console.error("Error writing file:", err);
-			return res.status(500).send("Error processing request");
-		}
-
-		res.status(200).send(
-			`File for booking ID ${bookingId} ${
-				fs.existsSync(filePath) ? "updated" : "created"
-			} in the booking_test_logs folder.`
-		);
-	});
-});
-// ------------------------------------------------
 
 // Cleaning function for JSON
 function cleanData(string) {
